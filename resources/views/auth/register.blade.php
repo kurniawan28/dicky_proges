@@ -86,7 +86,7 @@
 <body>
   <div class="container">
     <div class="left">
-      <img src="{{ asset('antrek 1.png') }}" alt="Logo SMK Antartika 1">
+      <img src="{{ asset('images/antrek1.png') }}" alt="Logo Sekolah" class="w-50 h-50 rounded-full shadow-xl">
     </div>
     <div class="right">
       <h1>Daftar Akun</h1>

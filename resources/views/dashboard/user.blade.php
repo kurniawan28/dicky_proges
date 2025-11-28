@@ -27,8 +27,9 @@
   <!-- Header -->
   <header class="bg-[#0b1a2b] text-white shadow-lg py-4 px-8 flex justify-between items-center sticky top-0 z-50">
     <div class="flex items-center space-x-3">
-      <img src="antrek 1.png" alt="Logo Sekolah" class="w-12 h-12 rounded-full shadow-xl">
+      <img src="{{ asset('images/antrek1.png') }}" alt="Logo Sekolah" class="w-12 h-12 rounded-full shadow-xl">
       <div>
+
         <h1 class="text-2xl font-bold tracking-tight text-cyan-400">BK APP</h1>
         <p class="text-sm text-cyan-300">Bimbingan Konseling SMK antartika 1</p>
       </div>
@@ -46,22 +47,19 @@
     <!-- Sidebar -->
     <aside class="w-64 bg-[#0b1a2b]/70 backdrop-blur-lg shadow-xl p-6 sticky top-0 h-screen rounded-tr-2xl rounded-br-2xl">
       <nav class="space-y-3">
-  <a href="{{ route('dashboard') }}" 
+  <a href="{{ route('dashboard.user') }}" 
      class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#3fc1c9]/20 hover:border-[#3fc1c9] hover:shadow-[0_0_15px_rgba(63,193,201,0.5)] hover:scale-[1.03] transition-all duration-300 text-[#3fc1c9] font-semibold">
      <span class="ml-1">🏠 Dashboard</span>
   </a>
 
-  <a href="{{ route('monitoring.index') }}" 
-     class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#4de0ff]/20 hover:border-[#4de0ff] hover:shadow-[0_0_15px_rgba(77,224,255,0.5)] hover:scale-[1.03] transition-all duration-300 text-[#4de0ff] font-semibold">
-     <span class="ml-1">📖 Pelanggaran Siswa</span>
-  </a>
+ 
 
   <a href="{{ route('prestasi.index') }}" 
      class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#ffe066]/20 hover:border-[#ffe066] hover:shadow-[0_0_15px_rgba(255,224,102,0.5)] hover:scale-[1.03] transition-all duration-300 text-[#ffe066] font-semibold">
      <span class="ml-1">🎖️ Prestasi Siswa</span>
   </a>
 
-  <a href="{{ route('konseling.index') }}" 
+  <a href="{{ route('jadwal.index') }}" 
      class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#b388eb]/20 hover:border-[#b388eb] hover:shadow-[0_0_15px_rgba(179,136,235,0.5)] hover:scale-[1.03] transition-all duration-300 text-[#b388eb] font-semibold">
      <span class="ml-1">💬 Daftar Konseling</span>
   </a>
@@ -69,11 +67,6 @@
   <a href="{{ route('konseling.create') }}" 
      class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#73a9ff]/20 hover:border-[#73a9ff] hover:shadow-[0_0_15px_rgba(115,169,255,0.5)] hover:scale-[1.03] transition-all duration-300 text-[#73a9ff] font-semibold">
      <span class="ml-1">➕ Ajukan Konseling</span>
-  </a>
-
-  <a href="{{ route('statistik.index') }}" 
-     class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#cccccc]/20 hover:border-[#cccccc] hover:shadow-[0_0_15px_rgba(204,204,204,0.5)] hover:scale-[1.03] transition-all duration-300 text-[#cccccc] font-semibold">
-     <span class="ml-1">📊 Statistik Siswa</span>
   </a>
 </nav>
 
@@ -93,12 +86,12 @@
   </a>
 
   <a href="{{ route('prestasi.index') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
-    <div class="text-5xl mb-4"></div>
-    <h2 class="text-xl font-semibold mb-2 text-yellow-300">PRESTASI SISWA</h2>
-    <p class="text-gray-200 text-sm">daftar prestasi siswa</p>
+     <div class="text-5xl mb-4"></div>
+     <h2 class="text-xl font-semibold mb-2 text-yellow-300">PRESTASI SISWA</h2>
+     <p class="text-gray-200 text-sm">daftar prestasi siswa</p>
   </a>
 
-  <a href="{{ route('konseling.index') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
+  <a href="{{ route('jadwal.index') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
     <div class="text-5xl mb-4"></div>
     <h2 class="text-xl font-semibold mb-2 text-purple-300">DAFTAR KONSELING SISWA</h2>
     <p class="text-gray-200 text-sm">Lihat pengajuan konseling siswa</p>
@@ -110,11 +103,7 @@
     <p class="text-gray-200 text-sm">konseling siswa</p>
   </a>
 
-  <a href="{{ route('statistik.index') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
-    <div class="text-5xl mb-4"></div>
-    <h2 class="text-xl font-semibold mb-2 text-gray-300">STATISIK SISWA</h2>
-    <p class="text-gray-200 text-sm">grafik & statistik siswa</p>
-  </a>
+ 
 </div>
     </main>
   </div>

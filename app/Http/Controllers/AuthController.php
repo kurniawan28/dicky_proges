@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
-class AuthController extends Controllers
+class AuthController extends Controller
 {
     // 🟦 Tampilkan form login
     public function showLoginForm()
@@ -49,26 +49,31 @@ class AuthController extends Controllers
         return view('auth.register');
     }
 
+    
+
     // 🟦 Proses register (langsung login)
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email'=> 'required|email|unique:users,email',
-            'password'=> 'required|string|min:6|confirmed'
-        ]);
+    // 🟦 Proses register (langsung login)
+public function register(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email'=> 'required|email|unique:users,email',
+        'password'=> 'required|string|min:6|confirmed'
+    ]);
 
-        // Buat user baru
-        $user = User::create([
-            'name'=> $request->name,
-            'email'=> $request->email,
-            'password'=> Hash::make($request->password)
-        ]);
+    // Default role = SISWA
+    $user = User::create([
+        'name'=> $request->name,
+        'email'=> $request->email,
+        'role'=> 'SISWA',  // jangan beri pilihan admin di register publik
+        'password'=> Hash::make($request->password)
+    ]);
 
-        // 🔥 Langsung login setelah register
-        Auth::login($user);
+    // 🔥 Langsung login setelah register
+    Auth::login($user);
 
-        // 🔁 Redirect langsung ke dashboard
-        return redirect()->route('dashboard')->with('success', 'Akun berhasil dibuat dan Anda sudah login!');
-    }
+    // 🔁 Redirect ke dashboard sesuai role
+    return redirect()->route('dashboard')->with('success', 'Akun berhasil dibuat dan Anda sudah login!');
+}
+
 }

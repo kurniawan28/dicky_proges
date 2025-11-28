@@ -26,7 +26,7 @@
       box-shadow: 0 0 40px #0ff;
       border-radius: 2rem;
     }
-    input:focus {
+    input:focus, select:focus {
       outline: none;
       border-color: #0ff;
       box-shadow: 0 0 10px #0ff;
@@ -47,13 +47,16 @@
 
     <!-- Bagian Logo (Kiri) -->
     <div class="w-full md:w-1/2 flex items-center justify-center bg-black bg-opacity-40 p-10">
-      <img src="{{ asset('antrek 1.png') }}" alt="Logo SMK Antartika 1" class="w-50 h-50 object-contain" style="border-radius: 20px;">
+     <img src="{{ asset('images/antrek1.png') }}"
+     alt="Logo Sekolah"
+     class="w-60 h-auto md:w-72 object-contain rounded-lg shadow-xl">
+
     </div>
 
     <!-- Bagian Form (Kanan) -->
     <div class="w-full md:w-1/2 p-10 flex flex-col justify-center text-white">
       <h2 class="text-4xl font-bold mb-2 text-cyan-400">Selamat Datang</h2>
-      <p class="text-cyan-200 mb-6">Masukkan email dan password untuk masuk ke sistem</p>
+      <p class="text-cyan-200 mb-6">Masukkan data login sesuai peran Anda di sistem</p>
 
       <!-- Error session -->
       @if(session('error'))
@@ -65,6 +68,8 @@
       <form action="{{ route('login.submit') }}" method="POST" class="space-y-5">
         @csrf
 
+        
+        <!-- Input Email -->
         <div class="relative">
           <input type="email" name="email" value="{{ old('email') }}" placeholder="Email"
             class="w-full rounded-lg px-4 py-3 bg-black bg-opacity-30 border border-cyan-500 placeholder-cyan-300 text-white transition">
@@ -73,6 +78,7 @@
           @enderror
         </div>
 
+        <!-- Input Password -->
         <div class="relative">
           <input type="password" name="password" placeholder="Password"
             class="w-full rounded-lg px-4 py-3 bg-black bg-opacity-30 border border-cyan-500 placeholder-cyan-300 text-white transition">
@@ -81,21 +87,20 @@
           @enderror
         </div>
 
+        <!-- Tombol Login -->
         <button type="submit"
           class="w-full py-3 rounded-xl font-semibold bg-gradient-to-r from-cyan-400 to-blue-500 text-white">
           Masuk
         </button>
       </form>
 
-      <!-- Perbaikan link register -->
+      <!-- Link Register -->
       <p class="text-center text-cyan-300 text-sm mt-6">
         Belum punya akun?
         <a href="{{ route('register') }}" class="text-cyan-400 font-medium hover:underline">Daftar</a>
       </p>
 
     </div>
-
-  </div>
-
+   </div>
 </body>
 </html>
