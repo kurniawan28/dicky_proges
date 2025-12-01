@@ -11,47 +11,56 @@ class PelanggaranController extends Controller
     public function index()
     {
         $pelanggaran = Pelanggaran::all();
-        $isAdmin = auth()->user()->role === 'GURU_BK'; // cek role sesuai DB
+        $isAdmin = auth()->user()->role === 'GURU_BK'; // cek role admin
         return view('pelanggaran', compact('pelanggaran', 'isAdmin'));
     }
 
     // Tambah pelanggaran baru (Admin Only)
     public function store(Request $request)
     {
-        if(auth()->user()->role !== 'GURU_BK'){
-            abort(403, 'Anda tidak memiliki akses!');
-        }
-
-        $validated = $request->validate([
+        $request->validate([
             'nama_siswa' => 'required|string|max:255',
             'kelas' => 'required|string|max:50',
             'jurusan' => 'required|string|max:50',
             'pelanggaran' => 'required|string|max:255',
+            'kategori' => 'required|in:ringan,sedang,berat',
             'tanggal' => 'required|date',
         ]);
 
-        Pelanggaran::create($validated);
+        Pelanggaran::create([
+            'nama_siswa' => $request->nama_siswa,
+            'kelas' => $request->kelas,
+            'jurusan' => $request->jurusan,
+            'pelanggaran' => $request->pelanggaran,
+            'kategori' => $request->kategori,
+            'tanggal' => $request->tanggal,
+        ]);
 
-        return redirect()->back()->with('success', 'Data pelanggaran berhasil ditambahkan!');
+        return redirect()->back()->with('success', 'Pelanggaran berhasil ditambahkan');
     }
 
     // Update pelanggaran (Admin Only)
     public function update(Request $request, $id)
     {
-        if(auth()->user()->role !== 'GURU_BK'){
-            abort(403, 'Anda tidak memiliki akses!');
-        }
-
-        $validated = $request->validate([
+        $request->validate([
             'nama_siswa' => 'required|string|max:255',
             'kelas' => 'required|string|max:50',
             'jurusan' => 'required|string|max:50',
             'pelanggaran' => 'required|string|max:255',
+            'kategori' => 'required|in:ringan,sedang,berat',
             'tanggal' => 'required|date',
         ]);
 
-        $item = Pelanggaran::findOrFail($id);
-        $item->update($validated);
+        $pelanggaran = Pelanggaran::findOrFail($id);
+
+        $pelanggaran->update([
+            'nama_siswa' => $request->nama_siswa,
+            'kelas' => $request->kelas,
+            'jurusan' => $request->jurusan,
+            'pelanggaran' => $request->pelanggaran,
+            'kategori' => $request->kategori,
+            'tanggal' => $request->tanggal,
+        ]);
 
         return redirect()->back()->with('success', 'Data pelanggaran berhasil diupdate!');
     }
@@ -59,12 +68,12 @@ class PelanggaranController extends Controller
     // Hapus pelanggaran (Admin Only)
     public function destroy($id)
     {
-        if(auth()->user()->role !== 'GURU_BK'){
+        if (auth()->user()->role !== 'GURU_BK') {
             abort(403, 'Anda tidak memiliki akses!');
         }
 
-        $item = Pelanggaran::findOrFail($id);
-        $item->delete();
+        $pelanggaran = Pelanggaran::findOrFail($id);
+        $pelanggaran->delete();
 
         return redirect()->back()->with('success', 'Data pelanggaran berhasil dihapus!');
     }

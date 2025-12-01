@@ -9,15 +9,16 @@ class Pelanggaran extends Model
 {
     use HasFactory;
 
-    // Nama tabel di database (opsional kalau tabelnya otomatis jamak)
+    // Nama tabel (opsional, kalau otomatis jamak)
     protected $table = 'pelanggarans';
 
-    // Kolom yang bisa diisi massal (mass assignable)
+    // Kolom yang bisa diisi massal
     protected $fillable = [
         'nama_siswa',
         'kelas',
         'jurusan',
         'pelanggaran',
+        'kategori',   // <-- pastikan ini ditambahkan
         'tanggal',
     ];
 

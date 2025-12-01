@@ -5,16 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aplikasi BK</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Tambahkan CSS kustom untuk warna latar belakang yang spesifik */
+        .bg-navy-dark {
+            background-color: #1A2138; /* Warna Biru Navy Gelap */
+        }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-navy-dark min-h-screen"> 
 
     <div class="flex">
 
-        <!-- SIDEBAR -->
-        @include('layouts.sidebar')
+        {{-- @include('layouts.sidebar') --}} 
 
-        <!-- MAIN CONTENT -->
-        <main class="flex-1 p-8">
+        <main class="w-full"> 
             @yield('content')
         </main>
 

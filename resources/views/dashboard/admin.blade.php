@@ -30,7 +30,7 @@
       <img src="{{ asset('images/antrek1.png') }}" alt="Logo Sekolah" class="w-12 h-12 rounded-full shadow-xl">
       <div>
         <h1 class="text-2xl font-bold tracking-tight text-cyan-400">BK APP</h1>
-        <p class="text-sm text-cyan-300">Bimbingan Konseling SMK antartika 1</p>
+        <p class="text-sm text-cyan-300">Bimbingan Konseling SMK antartika 1 sidoarjo</p>
       </div>
     </div>
     <form method="POST" action="{{ route('logout') }}">
@@ -70,6 +70,29 @@
      class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#cccccc]/20 hover:border-[#cccccc] hover:shadow-[0_0_15px_rgba(204,204,204,0.5)] hover:scale-[1.03] transition-all duration-300 text-[#cccccc] font-semibold">
      <span class="ml-1">📊 Statistik Siswa</span>
   </a>
+
+<a href="/chat-bk" 
+   class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#3fc1c9]/20 
+   hover:border-[#3fc1c9] hover:shadow-[0_0_15px_rgba(63,193,201,0.5)] 
+   hover:scale-[1.03] transition-all duration-300 text-cyan-300 font-semibold">
+   <span class="ml-1">🤖 Chat BK (AI)</span>
+</a>
+
+  <a href="{{ route('visi-misi') }}" 
+   class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#ff6b6b]/20 
+   hover:border-[#ff6b6b] hover:shadow-[0_0_15px_rgba(255,107,107,0.5)] 
+   hover:scale-[1.03] transition-all duration-300 text-[#ff6b6b] font-semibold">
+   <span class="ml-1">📜 Visi & Misi</span>
+
+   <a href="{{ route('siswa.index') }}" 
+   class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#00ffcc]/20 
+   hover:border-[#00ffcc] hover:shadow-[0_0_15px_rgba(0,255,204,0.5)] 
+   hover:scale-[1.03] transition-all duration-300 text-[#00ffcc] font-semibold">
+   <span class="ml-1">👨‍🎓 Data Siswa</span>
+</a>
+
+</a>
+
 </nav>
 
     </aside>
@@ -104,6 +127,27 @@
     <h2 class="text-xl font-semibold mb-2 text-gray-300">STATISIK SISWA</h2>
     <p class="text-gray-200 text-sm">grafik & statistik siswa</p>
   </a>
+
+  <a href="{{ route('chat.bk') }}" 
+   class="p-6 glow-card text-white text-center shadow-xl transition-smooth" 
+   style="background-color:#0B1828;">
+    <div class="text-5xl mb-4"></div>
+    <h2 class="text-xl font-semibold mb-2 text-cyan-300">CHAT BK (AI)</h2>
+    <p class="text-gray-200 text-sm">Asisten Konseling otomatis bertenaga AI</p>
+  </a>
+
+  <a href="{{ route('visi-misi') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
+    <div class="text-5xl mb-4"></div>
+    <h2 class="text-xl font-semibold mb-2 text-gray-300">Visi & Misi</h2>
+    <p class="text-gray-200 text-sm">📜 Visi & Misi</p>
+  </a>
+
+<a href="{{ route('siswa.index') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
+    <div class="text-5xl mb-4"></div>
+    <h2 class="text-xl font-semibold mb-2 text-gray-300">👨‍🎓 Data Siswa</h2>
+    <p class="text-gray-200 text-sm">Data Siswa</p>
+  </a> 
+
 </div>
 
     </main>
