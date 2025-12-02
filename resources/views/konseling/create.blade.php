@@ -39,8 +39,8 @@
 
         <div>
           <label class="block text-cyan-200 mb-2 font-medium">Nama Siswa</label>
-          <input type="text" name="nama_siswa" placeholder="Masukkan nama siswa"
-                 class="w-full bg-[#0b1a2b]/70 border border-cyan-400/30 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400 transition" required>
+          <input type="text" name="nama_siswa" value="{{ auth()->user()->name }}" readonly
+                 class="w-full bg-[#0b1a2b]/70 border border-cyan-400/30 rounded-lg px-4 py-2 text-gray-400 cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-cyan-400 transition" required>
         </div>
 
         <div>

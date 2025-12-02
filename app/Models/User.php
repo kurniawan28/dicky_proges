@@ -17,7 +17,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'role',      // role: 'admin' atau 'user'
+        'role',      // role: 'GURU_BK', 'ADMIN', atau 'SISWA'
         'password',
     ];
 
@@ -37,18 +37,26 @@ class User extends Authenticatable
     ];
 
     /**
-     * Helper: cek apakah user admin
+     * Helper: cek apakah user Guru BK
      */
-    public function isAdmin()
+    public function isGuruBK()
     {
-        return $this->role === 'admin';
+        return $this->role === 'GURU_BK';
     }
 
     /**
-     * Helper: cek apakah user biasa
+     * Helper: cek apakah user Admin (Ex Kepala Sekolah)
+     */
+    public function isAdmin()
+    {
+        return $this->role === 'ADMIN';
+    }
+
+    /**
+     * Helper: cek apakah user Siswa
      */
     public function isUser()
     {
-        return $this->role === 'user';
+        return $this->role === 'SISWA';
     }
 }

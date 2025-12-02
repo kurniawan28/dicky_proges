@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard BK Sekolah</title>
+  <title>Dashboard admin</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -29,9 +29,8 @@
     <div class="flex items-center space-x-3">
       <img src="{{ asset('images/antrek1.png') }}" alt="Logo Sekolah" class="w-12 h-12 rounded-full shadow-xl">
       <div>
-
-        <h1 class="text-2xl font-bold tracking-tight text-cyan-400">BK APP</h1>
-        <p class="text-sm text-cyan-300">Bimbingan Konseling SMK antartika 1 sidoarjo</p>
+        <h1 class="text-2xl font-bold tracking-tight text-cyan-400">BK APP - ADMIN</h1>
+        <p class="text-sm text-cyan-300">Bimbingan Konseling SMK Antartika 1 Sidoarjo</p>
       </div>
     </div>
     <form method="POST" action="{{ route('logout') }}">
@@ -47,9 +46,14 @@
     <!-- Sidebar -->
     <aside class="w-64 bg-[#0b1a2b]/70 backdrop-blur-lg shadow-xl p-6 sticky top-0 h-screen rounded-tr-2xl rounded-br-2xl">
       <nav class="space-y-3">
-  <a href="{{ route('dashboard.user') }}" 
+  <a href="{{ route('dashboard.kepsek') }}" 
      class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#3fc1c9]/20 hover:border-[#3fc1c9] hover:shadow-[0_0_15px_rgba(63,193,201,0.5)] hover:scale-[1.03] transition-all duration-300 text-[#3fc1c9] font-semibold">
      <span class="ml-1">🏠 Dashboard</span>
+  </a>
+
+  <a href="{{ route('monitoring.index') }}" 
+     class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#4de0ff]/20 hover:border-[#4de0ff] hover:shadow-[0_0_15px_rgba(77,224,255,0.5)] hover:scale-[1.03] transition-all duration-300 text-[#4de0ff] font-semibold">
+     <span class="ml-1">📖 Pelanggaran Siswa</span>
   </a>
 
   <a href="{{ route('prestasi.index') }}" 
@@ -57,30 +61,27 @@
      <span class="ml-1">🎖️ Prestasi Siswa</span>
   </a>
 
-  <a href="{{ route('jadwal.index') }}" 
+  <a href="{{ route('konseling.index') }}" 
      class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#b388eb]/20 hover:border-[#b388eb] hover:shadow-[0_0_15px_rgba(179,136,235,0.5)] hover:scale-[1.03] transition-all duration-300 text-[#b388eb] font-semibold">
      <span class="ml-1">💬 Daftar Konseling</span>
   </a>
 
-  <a href="{{ route('konseling.create') }}" 
-     class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#73a9ff]/20 hover:border-[#73a9ff] hover:shadow-[0_0_15px_rgba(115,169,255,0.5)] hover:scale-[1.03] transition-all duration-300 text-[#73a9ff] font-semibold">
-     <span class="ml-1">➕ Ajukan Konseling</span>
-  </a>
-
-  <a href="/chat-bk" 
+<a href="/chat-bk" 
    class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#3fc1c9]/20 
    hover:border-[#3fc1c9] hover:shadow-[0_0_15px_rgba(63,193,201,0.5)] 
    hover:scale-[1.03] transition-all duration-300 text-cyan-300 font-semibold">
    <span class="ml-1">🤖 Chat BK (AI)</span>
 </a>
 
-<a href="{{ route('visi-misi') }}" 
+  <a href="{{ route('visi-misi') }}" 
    class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#ff6b6b]/20 
    hover:border-[#ff6b6b] hover:shadow-[0_0_15px_rgba(255,107,107,0.5)] 
    hover:scale-[1.03] transition-all duration-300 text-[#ff6b6b] font-semibold">
    <span class="ml-1">📜 Visi & Misi</span>
-</a>
 
+
+
+</a>
 
 </nav>
 
@@ -88,54 +89,48 @@
 
     <!-- Main Content -->
     <main class="flex-1 p-10">
-      <h2 class="text-3xl font-bold text-cyan-400 mb-4">Halo, {{ auth()->user()->name }} </h2>
-      <p class="text-cyan-200 mb-10">Selamat datang di sistem Bimbingan Konseling sekolah smk antartika 1 sidoarjo.</p>
+      <h2 class="text-3xl font-bold text-cyan-400 mb-4">Halo, {{ auth()->user()->name }} 👋</h2>
+      <p class="text-cyan-200 mb-2">Selamat datang di sistem Bimbingan Konseling SMK Antartika 1 Sidoarjo.</p>
+      <p class="text-sm text-gray-400 mb-10">Dashboard admin - Monitoring & Laporan</p>
 
       <!-- Grid Menu (Cards) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
   <a href="{{ route('monitoring.index') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
     <div class="text-5xl mb-4"></div>
     <h2 class="text-xl font-semibold mb-2 text-cyan-200">PELANGGARAN SISWA</h2>
-    <p class="text-gray-200 text-sm">data pelanggaran siswa secara keseluruhan</p>
+    <p class="text-gray-200 text-sm">Data pelanggaran siswa secara keseluruhan</p>
   </a>
 
   <a href="{{ route('prestasi.index') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
-     <div class="text-5xl mb-4"></div>
-     <h2 class="text-xl font-semibold mb-2 text-yellow-300">PRESTASI SISWA</h2>
-     <p class="text-gray-200 text-sm">daftar prestasi siswa</p>
+    <div class="text-5xl mb-4"></div>
+    <h2 class="text-xl font-semibold mb-2 text-yellow-300">PRESTASI SISWA</h2>
+    <p class="text-gray-200 text-sm">Daftar prestasi siswa</p>
   </a>
 
-  <a href="{{ route('jadwal.index') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
+  <a href="{{ route('konseling.index') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
     <div class="text-5xl mb-4"></div>
-    <h2 class="text-xl font-semibold mb-2 text-purple-300">DAFTAR JADWAL KONSELING SISWA</h2>
+    <h2 class="text-xl font-semibold mb-2 text-purple-300">JADWAL KONSELING</h2>
     <p class="text-gray-200 text-sm">Lihat pengajuan konseling siswa</p>
   </a>
 
-  <a href="{{ route('konseling.create') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
-    <div class="text-5xl mb-4"></div>
-    <h2 class="text-xl font-semibold mb-2 text-blue-300">AJUKAN KONSELING SISWA</h2>
-    <p class="text-gray-200 text-sm">konseling siswa</p>
-  </a>
-
- <a href="{{ route('chat.bk') }}" 
+  <a href="{{ route('chat.bk') }}" 
    class="p-6 glow-card text-white text-center shadow-xl transition-smooth" 
    style="background-color:#0B1828;">
     <div class="text-5xl mb-4"></div>
     <h2 class="text-xl font-semibold mb-2 text-cyan-300">CHAT BK (AI)</h2>
-    <p class="text-gray-200 text-sm">Asisten Konseling otomatis bertenaga AI</p>
+    <p class="text-gray-200 text-sm">Asisten Konseling AI</p>
   </a>
 
-<a href="{{ route('visi-misi') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
+  <a href="{{ route('visi-misi') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
     <div class="text-5xl mb-4"></div>
     <h2 class="text-xl font-semibold mb-2 text-gray-300">Visi & Misi</h2>
-    <p class="text-gray-200 text-sm">📜 Visi & Misi</p>
+    <p class="text-gray-200 text-sm">📜 Visi & Misi Sekolah</p>
   </a>
 
-</a>
+ 
 
 </div>
-
-<!-- Footer Sosmed -->
+     <!-- Footer Sosmed -->
       <footer class="bg-[#0b1a2b]/80 backdrop-blur-lg text-gray-200 text-center py-8 mt-16 rounded-xl">
 
         <p class="mb-3 font-medium">

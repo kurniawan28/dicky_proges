@@ -10,7 +10,13 @@ class JadwalController extends Controller
 {
     public function index()
     {
-        $konseling = Konseling::orderBy('tanggal', 'asc')->get();
+        $query = Konseling::orderBy('tanggal', 'asc');
+
+        if (auth()->user()->role === 'SISWA') {
+            $query->where('nama_siswa', auth()->user()->name);
+        }
+
+        $konseling = $query->get();
 
         if (auth()->user()->role === 'GURU_BK') {
             return view('dashboard.admin', compact('konseling'));

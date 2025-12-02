@@ -9,7 +9,13 @@ class PrestasiController extends Controller
 {
     public function index()
     {
-        $prestasi = Prestasi::all();
+        $query = Prestasi::query();
+
+        if (auth()->user()->role === 'SISWA') {
+            $query->where('nama_siswa', auth()->user()->name);
+        }
+
+        $prestasi = $query->get();
         return view('prestasi', compact('prestasi'));
     }
 

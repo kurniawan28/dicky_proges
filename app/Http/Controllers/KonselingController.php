@@ -23,7 +23,7 @@ class KonselingController extends Controller
         ]);
 
         Konseling::create([
-            'nama_siswa'    => $request->nama_siswa,
+            'nama_siswa'    => auth()->user()->name,
             'kelas'         => $request->kelas,
             'tanggal'       => $request->tanggal,
             'permasalahan'  => $request->permasalahan,
@@ -43,7 +43,7 @@ class KonselingController extends Controller
 
         // 2. Terapkan filter berdasarkan role
         if ($user->role === 'SISWA') {
-            $query->where('nama_siswa', $user->nama); 
+            $query->where('nama_siswa', $user->name); 
         }
         
         // 3. Eksekusi query dan ambil hasilnya

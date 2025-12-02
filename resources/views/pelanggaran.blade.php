@@ -30,7 +30,7 @@ body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #
   <h1 class="text-3xl font-bold text-center mb-8 text-white flex justify-center items-center gap-2">⚠️ Pelanggaran Siswa</h1>
 
   {{-- FORM TAMBAH --}}
-  @if(auth()->user()->role === 'GURU_BK')
+  @if(auth()->user()->role === 'GURU_BK' || auth()->user()->role === 'ADMIN')
   <form action="{{ route('pelanggaran.store') }}" method="POST" class="mb-8 grid grid-cols-1 md:grid-cols-6 gap-4">
     @csrf
     <input type="text" name="nama_siswa" placeholder="Nama Siswa" required class="p-3 rounded-lg bg-slate-800 text-gray-200 border border-slate-700">
@@ -90,7 +90,7 @@ body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #
           <td class="py-3 px-4">{{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}</td>
 
           <td class="py-3 px-4 text-center">
-            @if(auth()->user()->role === 'GURU_BK')
+            @if(auth()->user()->role === 'GURU_BK' || auth()->user()->role === 'ADMIN')
                 <button type="button"
                     class="text-yellow-500 mr-2 edit-btn"
                     data-id="{{ $item->id }}"
@@ -120,7 +120,7 @@ body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #
 </div>
 
 {{-- MODAL EDIT --}}
-@if(auth()->user()->role === 'GURU_BK')
+@if(auth()->user()->role === 'GURU_BK' || auth()->user()->role === 'ADMIN')
 <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
   <div class="bg-slate-800 p-6 rounded-lg w-full max-w-md">
     <h2 class="text-xl font-bold mb-4 text-white">Edit Pelanggaran</h2>

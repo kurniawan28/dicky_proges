@@ -4,7 +4,7 @@
 
 <style>
 /* ============================= */
-/* GLOBAL RESET LAYOUT           */
+/* GLOBAL STYLING                */
 /* ============================= */
 
 body {
@@ -15,7 +15,7 @@ body {
     padding-top: 80px;
 }
 
-/* Hapus batasan width dari bootstrap container */
+/* Full width container */
 .container, #app {
     max-width: 100% !important;
     width: 100% !important;
@@ -24,7 +24,7 @@ body {
 }
 
 /* ============================= */
-/* CHAT AREA                     */
+/* CHAT WRAPPER                  */
 /* ============================= */
 .chat-wrapper {
     max-width: 900px;
@@ -36,6 +36,7 @@ body {
     box-shadow: 0 0 15px #0ff;
 }
 
+/* Header */
 .chat-header {
     text-align: center;
     margin-bottom: 15px;
@@ -44,6 +45,7 @@ body {
     color: #0ff;
 }
 
+/* Chat box */
 .chat-box {
     height: 500px;
     overflow-y: auto;
@@ -56,7 +58,7 @@ body {
     gap: 10px;
 }
 
-/* Scroll */
+/* Scrollbar */
 .chat-box::-webkit-scrollbar {
     width: 8px;
 }
@@ -98,7 +100,7 @@ body {
     box-shadow: 0 0 5px #dc3545;
 }
 
-/* Input Area */
+/* Input area */
 .chat-input-area {
     display: flex;
     gap: 10px;
@@ -125,10 +127,26 @@ body {
     cursor: pointer;
     box-shadow: 0 0 5px #ff00ff;
 }
+
+/* Navbar */
+.navbar-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid #334155;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 </style>
 
 <!-- NAVBAR -->
-<nav class="fixed top-0 left-0 right-0 bg-slate-900/80 backdrop-blur-md border-b border-slate-700 p-4 px-6 flex justify-between items-center z-50">
+<nav class="navbar-fixed">
     <a href="{{ route('dashboard') }}" class="text-xl font-semibold text-white">🏫 Sistem BK Sekolah</a>
     <form action="{{ route('logout') }}" method="POST">
         @csrf
@@ -167,9 +185,11 @@ function sendMessage() {
     const text = msgInput.value.trim();
     if (!text) return;
 
+    // tampilkan pesan user
     addMessage(text, "msg-user");
     msgInput.value = "";
 
+    // request ke backend
     fetch("{{ route('chat.bk.send') }}", {
         method: "POST",
         headers: {
@@ -187,8 +207,10 @@ function sendMessage() {
     });
 }
 
+// tombol kirim
 sendBtn.addEventListener("click", sendMessage);
 
+// Enter key
 msgInput.addEventListener("keypress", function(e){
     if (e.key === "Enter") {
         e.preventDefault();

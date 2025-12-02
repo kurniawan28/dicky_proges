@@ -20,19 +20,27 @@ class ChatBKController extends Controller
         ]);
 
         try {
+            // Kirim request ke GROQ API
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . env('GROQ_API_KEY'),
+                'Content-Type' => 'application/json',
+            ])->post(env('GROQ_BASE_URL'), [
+                'model' => 'llama-3.1-8b-instant',
+                'messages' => [
+                    [
+                        'role' => 'user',
+                        'content' => "Kamu adalah AI Bimbingan Konseling yang ramah, sopan, dan membantu siswa.
 
-            $response = Http::withToken(env('OPENAI_API_KEY'))
-                ->post('https://api.openai.com/v1/responses', [
-                    'model' => 'gpt-4o-mini',
-                    'input' => "
-                        Kamu adalah AI Bimbingan Konseling yang ramah, sopan, dan membantu siswa.
+Pesan siswa:
+{$request->message}"
+                    ]
+                ]
+            ]);
 
-                        Pesan siswa:
-                        {$request->message}
-                    ",
-                ]);
+            $data = $response->json();
 
-            $aiReply = $response->json()['output_text'] ?? 'AI tidak merespon.';
+            // Ambil balasan AI
+            $aiReply = $data['choices'][0]['message']['content'] ?? 'AI tidak merespon.';
 
             return response()->json([
                 'message' => $aiReply

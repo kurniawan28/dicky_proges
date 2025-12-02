@@ -100,13 +100,13 @@
                         <th class="py-3 px-4 text-left">Kelas</th>
                         <th class="py-3 px-4 text-left">Tanggal</th>
 
-                        @if(auth()->user()->role === 'GURU_BK')
+                        @if(auth()->user()->role === 'GURU_BK' || auth()->user()->role === 'ADMIN')
                             <th class="py-3 px-4 text-left">Permasalahan</th>
                         @endif
 
                         <th class="py-3 px-4 text-left">Guru BK</th>
 
-                        @if(auth()->user()->role === 'GURU_BK')
+                        @if(auth()->user()->role === 'GURU_BK' || auth()->user()->role === 'ADMIN')
                             <th class="py-3 px-4 text-center">Status</th>
                             <th class="py-3 px-4 text-center">Aksi</th>
                         @else
@@ -127,7 +127,7 @@
                             <td class="py-3 px-4">{{ $item->kelas }}</td>
                             <td class="py-3 px-4">{{ $item->tanggal }}</td>
 
-                            @if(auth()->user()->role === 'GURU_BK')
+                            @if(auth()->user()->role === 'GURU_BK' || auth()->user()->role === 'ADMIN')
                                 <td class="py-3 px-4">{{ $item->permasalahan }}</td>
                             @endif
 
@@ -144,8 +144,8 @@
                                 </span>
                             </td>
 
-                            {{-- AKSI (HANYA GURU BK) --}}
-                            @if(auth()->user()->role === 'GURU_BK')
+                            {{-- AKSI (HANYA GURU BK & ADMIN) --}}
+                            @if(auth()->user()->role === 'GURU_BK' || auth()->user()->role === 'ADMIN')
                                 <td class="py-3 px-4 text-center flex gap-2 justify-center">
 
                                     {{-- Tombol ACC --}}

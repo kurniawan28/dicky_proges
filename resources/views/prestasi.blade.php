@@ -29,7 +29,7 @@ body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #
   <h1 class="text-3xl font-bold text-center mb-8 text-white flex justify-center items-center gap-2">🏅 Prestasi Siswa</h1>
 
   {{-- Form Tambah Prestasi (Admin Only) --}}
-  @if(strtolower(auth()->user()->role) === 'guru_bk')
+  @if(auth()->user()->role === 'ADMIN')
   <form action="{{ route('prestasi.store') }}" method="POST" class="mb-8 grid grid-cols-1 md:grid-cols-5 gap-4">
       @csrf
       <input type="text" name="nama_siswa" placeholder="Nama Siswa" required class="p-3 rounded-lg bg-slate-800 text-gray-200 border border-slate-700 focus:ring-2 focus:ring-blue-500 outline-none">
@@ -63,7 +63,7 @@ body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #
           <td class="py-3 px-4">{{ $item->prestasi }}</td>
           <td class="py-3 px-4">{{ $item->tahun }}</td>
           <td class="py-3 px-4 text-center">
-            @if(strtolower(auth()->user()->role) === 'guru_bk')
+            @if(auth()->user()->role === 'ADMIN')
               <button type="button" onclick="openEditModal({{ $item->id }}, '{{ $item->nama_siswa }}', '{{ $item->kelas }}', '{{ $item->jurusan }}', '{{ $item->prestasi }}', '{{ $item->tahun }}')" class="text-blue-500 mr-2">Edit</button>
 
               <form action="{{ route('prestasi.destroy', $item->id) }}" method="POST" style="display:inline;">
@@ -83,7 +83,7 @@ body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #
 </div>
 
 {{-- Modal Edit (Admin Only) --}}
-@if(strtolower(auth()->user()->role) === 'guru_bk')
+@if(auth()->user()->role === 'ADMIN')
 <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
   <div class="bg-slate-800 p-6 rounded-lg w-full max-w-md">
     <h2 class="text-xl font-bold mb-4 text-white">Edit Prestasi</h2>

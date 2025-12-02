@@ -10,8 +10,17 @@ class PelanggaranController extends Controller
     // Tampilkan semua data pelanggaran
     public function index()
     {
-        $pelanggaran = Pelanggaran::all();
-        $isAdmin = auth()->user()->role === 'GURU_BK'; // cek role admin
+        $user = auth()->user();
+        
+        // Jika SISWA, hanya tampilkan pelanggaran miliknya
+        if ($user->role === 'SISWA') {
+            $pelanggaran = Pelanggaran::where('nama_siswa', $user->name)->get();
+        } else {
+            // Jika GURU_BK atau KEPALA_SEKOLAH, tampilkan semua
+            $pelanggaran = Pelanggaran::all();
+        }
+
+        $isAdmin = $user->role === 'GURU_BK' || $user->role === 'ADMIN'; 
         return view('pelanggaran', compact('pelanggaran', 'isAdmin'));
     }
 
@@ -68,7 +77,8 @@ class PelanggaranController extends Controller
     // Hapus pelanggaran (Admin Only)
     public function destroy($id)
     {
-        if (auth()->user()->role !== 'GURU_BK') {
+        $user = auth()->user();
+        if ($user->role !== 'GURU_BK' && $user->role !== 'ADMIN') {
             abort(403, 'Anda tidak memiliki akses!');
         }
 

@@ -66,11 +66,6 @@
      <span class="ml-1">💬 Daftar Konseling</span>
   </a>
 
-  <a href="{{ route('statistik.index') }}" 
-     class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#cccccc]/20 hover:border-[#cccccc] hover:shadow-[0_0_15px_rgba(204,204,204,0.5)] hover:scale-[1.03] transition-all duration-300 text-[#cccccc] font-semibold">
-     <span class="ml-1">📊 Statistik Siswa</span>
-  </a>
-
 <a href="/chat-bk" 
    class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#3fc1c9]/20 
    hover:border-[#3fc1c9] hover:shadow-[0_0_15px_rgba(63,193,201,0.5)] 
@@ -84,14 +79,7 @@
    hover:scale-[1.03] transition-all duration-300 text-[#ff6b6b] font-semibold">
    <span class="ml-1">📜 Visi & Misi</span>
 
-   <a href="{{ route('siswa.index') }}" 
-   class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#00ffcc]/20 
-   hover:border-[#00ffcc] hover:shadow-[0_0_15px_rgba(0,255,204,0.5)] 
-   hover:scale-[1.03] transition-all duration-300 text-[#00ffcc] font-semibold">
-   <span class="ml-1">👨‍🎓 Data Siswa</span>
-</a>
 
-</a>
 
 </nav>
 
@@ -118,15 +106,10 @@
 
   <a href="{{ route('konseling.index') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
     <div class="text-5xl mb-4"></div>
-    <h2 class="text-xl font-semibold mb-2 text-purple-300">DAFTAR KONSELING SISWA</h2>
+    <h2 class="text-xl font-semibold mb-2 text-purple-300">DAFTAR  JADWAL KONSELING SISWA</h2>
     <p class="text-gray-200 text-sm">Lihat pengajuan konseling siswa</p>
   </a>
 
-  <a href="{{ route('statistik.index') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
-    <div class="text-5xl mb-4"></div>
-    <h2 class="text-xl font-semibold mb-2 text-gray-300">STATISIK SISWA</h2>
-    <p class="text-gray-200 text-sm">grafik & statistik siswa</p>
-  </a>
 
   <a href="{{ route('chat.bk') }}" 
    class="p-6 glow-card text-white text-center shadow-xl transition-smooth" 
@@ -142,13 +125,35 @@
     <p class="text-gray-200 text-sm">📜 Visi & Misi</p>
   </a>
 
-<a href="{{ route('siswa.index') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
-    <div class="text-5xl mb-4"></div>
-    <h2 class="text-xl font-semibold mb-2 text-gray-300">👨‍🎓 Data Siswa</h2>
-    <p class="text-gray-200 text-sm">Data Siswa</p>
-  </a> 
+ 
 
 </div>
+     <!-- Footer Sosmed -->
+      <footer class="bg-[#0b1a2b]/80 backdrop-blur-lg text-gray-200 text-center py-8 mt-16 rounded-xl">
+
+        <p class="mb-3 font-medium">
+          Selamat datang di website SMK ANTARTIKA 1 SIDOARJO. Semoga informasi ini bermanfaat bagi siswa, orang tua, dan guru.
+        </p>
+        <p class="mb-3 font-medium">Mencetak generasi unggul dan berakhlak mulia.</p>
+
+        <!-- Sosmed -->
+        <div class="flex justify-center gap-6 mt-4">
+
+          <a href="https://www.instagram.com/smkantartika1sda/" target="_blank"
+             class="flex items-center gap-2 text-pink-400 hover:text-pink-300 transition text-lg">
+            📸 Instagram
+          </a>
+
+          <a href="https://www.tiktok.com/@smkantartika1sda?is_from_webapp=1&sender_device=pc" target="_blank"
+             class="flex items-center gap-2 text-white hover:text-gray-300 transition text-lg">
+            🎵 TikTok
+          </a>
+
+        </div>
+
+        <p class="mt-3 text-gray-400 text-sm">© {{ date('Y') }} SMK Antartika 1 Sidoarjo</p>
+
+      </footer>
 
     </main>
   </div>
