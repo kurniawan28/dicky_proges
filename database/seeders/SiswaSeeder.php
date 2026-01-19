@@ -18,10 +18,10 @@ class SiswaSeeder extends Seeder
         // ]);
 
         User::create([
-            'name' => 'satrya',
-            'email' => 'satrya@gmail.com',
+            'name' => 'admin',
+            'email' => 'admin@gmail.com',
             'password' => Hash::make('password123'),
-            'role' => 'SISWA',
+            'role' => 'ADMIN',
         ]);
 
         User::create([
