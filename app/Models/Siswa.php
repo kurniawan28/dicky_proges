@@ -21,5 +21,7 @@ class Siswa extends Model
         'alamat',
         'no_hp',
         'foto',
+        'total_poin',
+        'kategori_sanksi',
     ];
 }

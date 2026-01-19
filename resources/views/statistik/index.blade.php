@@ -58,9 +58,9 @@ body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #
     <canvas id="pelanggaranChart" width="400" height="400"></canvas>
 
     <div class="mt-6 text-left text-sm text-gray-300">
-        <p>🟢 <b>Hijau</b> – Pelanggaran ringan</p>
-        <p>🟡 <b>Kuning</b> – Pelanggaran sedang</p>
-        <p>🔴 <b>Merah</b> – Pelanggaran berat</p>
+        <p>🟢 <b>Hijau</b> – Pelanggaran ringan dengan poin (10)</p>
+        <p>🟡 <b>Kuning</b> – Pelanggaran sedang dengan poin (50)</p>
+        <p>🔴 <b>Merah</b> – Pelanggaran berat dengan poin (100)</p>
     </div>
 </div>
 

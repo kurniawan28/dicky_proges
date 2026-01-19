@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('pelanggaran');
             $table->string('kategori');
             $table->date('tanggal');
+             $table->timestamps();
         });
     }
 

@@ -16,7 +16,8 @@ return new class extends Migration
             $table->text('permasalahan');
             $table->string('guru_bk');
 $table->enum('status', ['pending','setuju','tolak'])->default('pending');
-    $table->timestamps();        });
+            $table->timestamps();
+        });
     }
 
     public function down(): void

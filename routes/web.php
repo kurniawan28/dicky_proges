@@ -33,49 +33,59 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         $role = auth()->user()->role;
         if ($role === 'GURU_BK') return redirect()->route('dashboard.admin');
-        if ($role === 'ADMIN') return redirect()->route('dashboard.kepsek'); // Tetap pakai route name dashboard.kepsek atau ganti? User minta ganti role saja.
+        if ($role === 'ADMIN') return redirect()->route('dashboard.kepsek');
         if ($role === 'SISWA') return redirect()->route('dashboard.user');
         abort(403, "Role tidak dikenali!");
     })->name('dashboard');
 
-    // ===== CHAT AI (SISWA, GURU_BK, ADMIN) =====
+    // ===== CHAT AI =====
     Route::middleware('role:SISWA,GURU_BK,ADMIN')->group(function () {
         Route::get('/chat-bk', [ChatBKController::class, 'index'])->name('chat.bk');
         Route::post('/chat-bk/send', [ChatBKController::class, 'chat'])->name('chat.bk.send');
     });
 
+    // ================================
+    //  ROUTE KHUSUS GURU BK + ADMIN
+    // ================================
     Route::middleware('role:GURU_BK,ADMIN')->group(function () {
+
+        // Data Siswa
         Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa.index');
-        
-        // Pelanggaran CRUD (Shared Access)
+
+        // Pelanggaran CRUD
         Route::post('/pelanggaran', [PelanggaranController::class, 'store'])->name('pelanggaran.store');
         Route::put('/pelanggaran/{id}', [PelanggaranController::class, 'update'])->name('pelanggaran.update');
         Route::delete('/pelanggaran/{id}', [PelanggaranController::class, 'destroy'])->name('pelanggaran.destroy');
 
-        // Konseling (Shared Access)
+        // Konseling
         Route::get('/konseling', [KonselingController::class, 'index'])->name('konseling.index');
         Route::get('/konseling/{id}/edit', [KonselingController::class, 'edit'])->name('konseling.edit');
         Route::put('/konseling/{id}', [KonselingController::class, 'update'])->name('konseling.update');
         Route::delete('/konseling/{id}', [KonselingController::class, 'destroy'])->name('konseling.destroy');
         Route::post('/konseling/{id}/status', [KonselingController::class, 'updateStatus'])->name('konseling.updateStatus');
-   });
+
+        // =====================================================
+        // ROUTE ACC & TOLAK PENGAJUAN KONSELING  (FIX TERBARU)
+        // =====================================================
+        Route::post('/konseling/{id}/acc', [JadwalController::class, 'acc'])->name('konseling.acc');
+        Route::post('/konseling/{id}/tolak', [JadwalController::class, 'tolak'])->name('konseling.tolak');
+    });
 
     // ===== VISI & MISI =====
     Route::middleware('role:SISWA,GURU_BK,ADMIN')->group(function () {
         Route::get('/visi-misi', [VisiMisiController::class, 'index'])->name('visi-misi');
     });
 
-    // ===== DASHBOARD ADMIN (GURU_BK) =====
-    Route::middleware('role:GURU_BK')->group(function () {
+    // ================================
+    //  DASHBOARD GURU BK
+    // ================================
+    Route::middleware('role:GURU_BK,ADMIN')->group(function () {
+
         Route::get('/dashboard/admin', fn() => view('dashboard.admin'))->name('dashboard.admin');
 
         // Jadwal CRUD
         Route::post('/jadwal', [JadwalController::class, 'store'])->name('jadwal.store');
         Route::delete('/jadwal/{id}', [JadwalController::class, 'destroy'])->name('jadwal.destroy');
-
-
-
-
 
         // CRUD SISWA
         Route::get('/siswa/create', [SiswaController::class, 'create'])->name('siswa.create');
@@ -85,28 +95,31 @@ Route::middleware('auth')->group(function () {
         Route::delete('/siswa/{siswa}', [SiswaController::class, 'destroy'])->name('siswa.destroy');
     });
 
-    // ===== DASHBOARD ADMIN (Ex KEPALA SEKOLAH) =====
+    // ================================
+    //  DASHBOARD ADMIN (GURU BK)
+    // ================================
     Route::middleware('role:ADMIN')->group(function () {
-        Route::get('/dashboard/admin-sekolah', fn() => view('dashboard.admin_sekolah'))->name('dashboard.kepsek'); // Keep route name for compatibility or change? Let's keep name but change URL/View
 
+        Route::get('/dashboard/admin-sekolah', fn() => view('dashboard.admin_sekolah'))->name('dashboard.kepsek');
 
-
-        // Prestasi CRUD (Hanya ADMIN)
+        // Prestasi
         Route::post('/prestasi', [PrestasiController::class, 'store'])->name('prestasi.store');
         Route::put('/prestasi/{id}', [PrestasiController::class, 'update'])->name('prestasi.update');
         Route::delete('/prestasi/{id}', [PrestasiController::class, 'destroy'])->name('prestasi.destroy');
     });
 
-    // ===== DASHBOARD SISWA =====
+    // ================================
+    //  DASHBOARD SISWA
+    // ================================
     Route::middleware('role:SISWA')->group(function () {
         Route::get('/dashboard/user', fn() => view('dashboard.user'))->name('dashboard.user');
 
-        // Konseling
+        // Siswa buat pengajuan konseling
         Route::get('/konseling/create', [KonselingController::class, 'create'])->name('konseling.create');
         Route::post('/konseling', [KonselingController::class, 'store'])->name('konseling.store');
     });
 
-    // ===== Halaman bisa dilihat semua =====
+    // ===== Halaman Umum =====
     Route::get('/jadwal', [JadwalController::class, 'index'])->name('jadwal.index');
     Route::get('/datasiswa', fn() => view('datasiswa'))->name('datasiswa.index');
     Route::get('/monitoring', [PelanggaranController::class, 'index'])->name('monitoring.index');

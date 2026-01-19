@@ -1,108 +1,121 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register BK</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background: #0f172a;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .container {
-      display: flex;
-      background: #0f172a;
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
-      width: 700px;
-      max-width: 95%;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .left {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .left img { max-width: 350px; }
-    .right {
-      flex: 1;
-      color: #38bdf8;
-      padding-left: 15px;
-    }
-    h1 { font-size: 2rem; margin-bottom: 5px; color: #38bdf8; }
-    p { margin-bottom: 5px; color: #94a3b8; }
-    input[type="text"], input[type="email"], input[type="password"] {
-      width: 100%;
-      height: 45px;
-      padding: 10px 12px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      background: #1e293b;
-      color: #f1f5f9;
-      font-size: 14px;
-      box-sizing: border-box;
-      transition: 0.3s;
-    }
-    input::placeholder { color: #94a3b8; }
-    input:focus {
-      background: #0f172a;
-      border: 1px solid #3b82f6;
-      box-shadow: 0 0 8px rgba(59, 130, 246, 0.7);
-    }
-    .btn {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 5px;
-      background: linear-gradient(to right, #06b6d4, #3b82f6);
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 0 5px rgba(59, 130, 246, 0.7);
-      transition: 0.3s;
-    }
-    .btn:hover {
-      background: linear-gradient(to right, #3b82f6, #06b6d4);
-    }
-    .footer-text {
-      text-align: center;
-      margin-top: 20px;
-      color: #94a3b8;
-    }
-    .footer-text a { color: #38bdf8; text-decoration: none; }
-    .footer-text a:hover { text-decoration: underline; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Sistem Sekolah</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(270deg, #0f0c29, #302b63, #24243e);
+            background-size: 600% 600%;
+            animation: gradientBG 20s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .glass-card {
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(15px);
+            border: 2px solid #0ff;
+            box-shadow: 0 0 40px rgba(0,255,255,0.6);
+            border-radius: 2rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #0ff;
+            box-shadow: 0 0 12px #0ff;
+        }
+
+        button {
+            box-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+            transition: 0.3s ease;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px #0ff, 0 0 50px #0ff;
+        }
+    </style>
 </head>
-<body>
-  <div class="container">
-    <div class="left">
-      <img src="{{ asset('images/antrek1.png') }}" alt="Logo Sekolah" class="w-50 h-50 rounded-full shadow-xl">
+
+<body class="flex items-center justify-center px-4">
+
+    <div class="flex flex-col md:flex-row w-full max-w-4xl glass-card overflow-hidden">
+
+        <!-- Logo (SAMA DENGAN LOGIN) -->
+        <div class="w-full md:w-1/2 flex items-center justify-center bg-black/40 p-10">
+            <img src="{{ asset('images/antrek1.png') }}"
+                 alt="Logo Sekolah"
+                 class="w-60 md:w-72 object-contain rounded-xl shadow-2xl">
+        </div>
+
+        <!-- Form Register -->
+        <div class="w-full md:w-1/2 p-10 flex flex-col justify-center text-white">
+
+            <h2 class="text-4xl font-bold text-cyan-400 mb-2">
+                Daftar Akun
+            </h2>
+            <p class="text-cyan-200 mb-6">
+                Isi data berikut untuk membuat akun baru
+            </p>
+
+            <form action="{{ route('register.submit') }}" method="POST" class="space-y-5">
+                @csrf
+
+                <input type="text"
+                       name="name"
+                       placeholder="Nama Lengkap"
+                       class="w-full px-4 py-3 rounded-lg bg-black/30 border border-cyan-500 placeholder-cyan-300 text-white transition"
+                       required autocomplete="off">
+
+                <input type="email"
+                       name="email"
+                       placeholder="Email"
+                       class="w-full px-4 py-3 rounded-lg bg-black/30 border border-cyan-500 placeholder-cyan-300 text-white transition"
+                       required autocomplete="off">
+
+                <input type="password"
+                       name="password"
+                       placeholder="Password"
+                       class="w-full px-4 py-3 rounded-lg bg-black/30 border border-cyan-500 placeholder-cyan-300 text-white transition"
+                       required autocomplete="off">
+
+                <input type="password"
+                       name="password_confirmation"
+                       placeholder="Konfirmasi Password"
+                       class="w-full px-4 py-3 rounded-lg bg-black/30 border border-cyan-500 placeholder-cyan-300 text-white transition"
+                       required autocomplete="off">
+
+                <button type="submit"
+                        class="w-full py-3 rounded-xl font-semibold bg-gradient-to-r from-cyan-400 to-blue-500">
+                    Register
+                </button>
+            </form>
+
+            <p class="text-center text-cyan-300 text-sm mt-6">
+                Sudah punya akun?
+                <a href="{{ route('login') }}"
+                   class="text-cyan-400 font-medium hover:underline">
+                    Login
+                </a>
+            </p>
+
+        </div>
     </div>
-    <div class="right">
-      <h1>Daftar Akun</h1>
-      <p>Silakan isi data Anda untuk membuat akun baru</p>
-      <form action="{{ route('register.submit') }}" method="POST">
-        @csrf
-        <input type="text" name="name" placeholder="Nama Lengkap" required>
-        <input type="email" name="email" placeholder="Email" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="password" name="password_confirmation" placeholder="Konfirmasi Password" required>
-        <button type="submit" class="btn">Register</button>
-      </form>
-      <div class="footer-text">
-        Sudah punya akun? <a href="{{ route('login') }}">Login</a>
-      </div>
-    </div>
-  </div>
+
 </body>
 </html>

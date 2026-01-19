@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->enum('role', ['GURU_BK', 'WALI_KELAS', 'SISWA', 'WALI_MURID', 'KEPALA_SEKOLAH']);
-            $table->foreignId('kelas_id')->nullable()->constrained('kelas'); // kolom kelas_id
+            $table->foreignId('kelas_id')->nullable(); // kolom kelas_id
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

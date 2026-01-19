@@ -18,10 +18,18 @@ class Pelanggaran extends Model
         'kelas',
         'jurusan',
         'pelanggaran',
-        'kategori',   // <-- pastikan ini ditambahkan
+        'kategori',
+        'poin',
         'tanggal',
+        'sanksi',
     ];
 
     // (Opsional) format tanggal otomatis
     protected $dates = ['tanggal'];
+
+    // Relasi ke Siswa
+    public function siswa()
+    {
+        return $this->belongsTo(Siswa::class, 'nama_siswa', 'nama_lengkap');
+    }
 }

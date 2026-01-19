@@ -53,12 +53,33 @@ class JadwalController extends Controller
         return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil dihapus!');
     }
 
-    public function updateStatus($id)
+    /* =======================
+       ACC KONSELING
+    ======================= */
+    public function acc($id)
     {
         $konseling = Konseling::findOrFail($id);
-        $konseling->status = 'ACC';
+        $konseling->status = 'setuju';
+        $konseling->alasan_penolakan = null;
         $konseling->save();
 
-        return redirect()->back()->with('success', 'Pengajuan telah di ACC!');
+        return back()->with('success', 'Pengajuan konseling berhasil di ACC!');
+    }
+
+    /* =======================
+       TOLAK KONSELING
+    ======================= */
+    public function tolak(Request $request, $id)
+    {
+        $request->validate([
+            'alasan_penolakan' => 'required|string'
+        ]);
+
+        $konseling = Konseling::findOrFail($id);
+        $konseling->status = 'tolak';
+        $konseling->alasan_penolakan = $request->alasan_penolakan;
+        $konseling->save();
+
+        return back()->with('success', 'Pengajuan konseling berhasil ditolak.');
     }
 }

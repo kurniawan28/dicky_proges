@@ -6,22 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::table('siswas', function (Blueprint $table) {
-            if (!Schema::hasColumn('siswas', 'no_absen')) {
-                $table->string('no_absen')->unique()->after('id');
-            }
-            if (!Schema::hasColumn('siswas', 'status_absen')) {
-                $table->enum('status_absen', ['Hadir','Tidak Hadir','Izin','Sakit'])->default('Hadir')->after('no_hp');
-            }
+            $table->integer('total_poin')->default(0)->after('foto');
+            $table->string('kategori_sanksi')->default('Aman')->after('total_poin');
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::table('siswas', function (Blueprint $table) {
-            $table->dropColumn(['no_absen', 'status_absen']);
+            $table->dropColumn(['total_poin', 'kategori_sanksi']);
         });
     }
 };

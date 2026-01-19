@@ -17,8 +17,8 @@
         border-radius: 1rem; 
         box-shadow: 0 0 25px rgba(59, 130, 246, 0.3); 
         padding: 2rem; 
-        width: 100%;          /* Ambil seluruh lebar parent */
-        max-width: 1400px;    /* Maksimal lebar card */
+        width: 100%;
+        max-width: 1400px;
     }
 
     .glow-btn { 
@@ -48,29 +48,45 @@
     </a>
     <form action="{{ route('logout') }}" method="POST">
         @csrf
-        <button type="submit" class="logout-btn text-white font-semibold py-2 px-5 rounded-lg">Logout</button>
+        <button type="submit" class="logout-btn text-white font-semibold py-2 px-5 rounded-lg">
+            Logout
+        </button>
     </form>
 </nav>
 
 <div class="flex justify-center p-6 pt-28 w-full">
     <div class="card">
 
-        {{-- Header --}}
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-3xl font-bold text-white flex items-center gap-2">📘 Data Siswa</h2>
-            <a href="{{ route('siswa.create') }}" class="glow-btn text-white py-2 px-4 rounded-lg font-semibold">
-                + Tambah Siswa
-            </a>
+        {{-- HEADER --}}
+        <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
+            <h2 class="text-3xl font-bold text-white flex items-center gap-2">
+                📘 Data Siswa
+            </h2>
+
+            <div class="flex gap-3 w-full md:w-auto">
+                <input 
+                    type="text" 
+                    id="searchInput"
+                    placeholder="🔍 Cari nama / NIS..."
+                    class="w-full md:w-72 p-3 rounded-lg bg-slate-800 text-gray-200 border border-slate-700 focus:ring-2 focus:ring-cyan-500 outline-none"
+                >
+
+                <a href="{{ route('siswa.create') }}" class="glow-btn text-white py-2 px-4 rounded-lg font-semibold whitespace-nowrap">
+                    + Tambah Siswa
+                </a>
+            </div>
         </div>
 
-        {{-- Success --}}
+        {{-- SUCCESS --}}
         @if(session('success'))
-            <div class="mb-4 p-3 rounded bg-green-600 text-white shadow-neon">{{ session('success') }}</div>
+            <div class="mb-4 p-3 rounded bg-green-600 text-white shadow-neon">
+                {{ session('success') }}
+            </div>
         @endif
 
-        {{-- Tabel --}}
+        {{-- TABEL --}}
         <div class="overflow-x-auto rounded-lg">
-            <table class="w-full border-collapse">
+            <table class="w-full border-collapse" id="siswaTable">
                 <thead class="bg-cyan-600 text-white">
                     <tr>
                         <th class="py-3 px-4 text-left">No Absen</th>
@@ -82,9 +98,10 @@
                         <th class="py-3 px-4 text-center">Aksi</th>
                     </tr>
                 </thead>
+
                 <tbody class="divide-y divide-slate-700 bg-slate-800 text-gray-300">
-                    @forelse($siswas as $s)
-                    <tr class="hover:bg-slate-700">
+                    @foreach($siswas as $s)
+                    <tr class="hover:bg-slate-700 transition siswa-row">
                         <td class="py-3 px-4">{{ $s->no_absen ?? '-' }}</td>
                         <td class="py-3 px-4">{{ $s->nis }}</td>
                         <td class="py-3 px-4">{{ $s->nama_lengkap }}</td>
@@ -96,26 +113,51 @@
                         </td>
                         <td class="py-3 px-4">{{ $s->no_hp ?? '-' }}</td>
                         <td class="py-3 px-4 flex justify-center gap-2">
-                            <a href="{{ route('siswa.edit', $s->id) }}" class="bg-yellow-500 text-white px-3 py-1 rounded-md text-sm">Edit</a>
-                            <form action="{{ route('siswa.destroy', $s->id) }}" method="POST" onsubmit="return confirm('Hapus data?')">
+                            <a href="{{ route('siswa.edit', $s->id) }}" class="bg-yellow-500 text-white px-3 py-1 rounded-md text-sm">
+                                Edit
+                            </a>
+                            <form action="{{ route('siswa.destroy', $s->id) }}" method="POST" onsubmit="return confirm('Hapus data siswa ini?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded-md text-sm">Hapus</button>
+                                <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded-md text-sm">
+                                    Hapus
+                                </button>
                             </form>
                         </td>
                     </tr>
-                    @empty
-                    <tr>
-                        <td colspan="7" class="py-8 text-center text-gray-400">Belum ada data siswa.</td>
+                    @endforeach
+
+                    <tr id="noDataRow" class="hidden">
+                        <td colspan="7" class="py-10 text-center text-gray-400">
+                            ❌ Data tidak ditemukan
+                        </td>
                     </tr>
-                    @endforelse
                 </tbody>
             </table>
         </div>
 
-        {{-- Pagination --}}
-        <div class="mt-4">{{ $siswas->links() }}</div>
-
     </div>
 </div>
+
+{{-- 🔥 SEARCH REALTIME SCRIPT --}}
+<script>
+document.getElementById('searchInput').addEventListener('keyup', function () {
+    const keyword = this.value.toLowerCase();
+    const rows = document.querySelectorAll('.siswa-row');
+    let found = false;
+
+    rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        if (text.includes(keyword)) {
+            row.style.display = '';
+            found = true;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    document.getElementById('noDataRow').classList.toggle('hidden', found);
+});
+</script>
+
 @endsection

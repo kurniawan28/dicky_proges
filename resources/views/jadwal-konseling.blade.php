@@ -59,7 +59,6 @@
         }
     </style>
 </head>
-
 <body>
 
     {{-- NAVBAR --}}
@@ -81,7 +80,7 @@
             📋 Data Konseling Siswa
         </h1>
 
-        {{-- TOMBOL AJUKAN KONSELING (HANYA SISWA) --}}
+        {{-- TOMBOL AJUKAN KONSELING --}}
         @if(auth()->user()->role === 'SISWA')
             <div class="mb-8">
                 <a href="{{ route('konseling.create') }}" class="glow-btn text-white py-3 px-6 rounded-lg font-semibold inline-block">
@@ -98,19 +97,16 @@
                     <tr>
                         <th class="py-3 px-4 text-left">Nama Siswa</th>
                         <th class="py-3 px-4 text-left">Kelas</th>
-                        <th class="py-3 px-4 text-left">Tanggal</th>
-
-                        @if(auth()->user()->role === 'GURU_BK' || auth()->user()->role === 'ADMIN')
+                        <th class="py-3 px-4 text-left">Absen</th>
+                        <th class="py-3 px-4 text-left">Tanggal Konseling</th>
+                        <th class="py-3 px-4 text-left">Jam</th>
+                        @if(auth()->user()->role !== 'SISWA')
                             <th class="py-3 px-4 text-left">Permasalahan</th>
                         @endif
-
                         <th class="py-3 px-4 text-left">Guru BK</th>
-
-                        @if(auth()->user()->role === 'GURU_BK' || auth()->user()->role === 'ADMIN')
-                            <th class="py-3 px-4 text-center">Status</th>
+                        <th class="py-3 px-4 text-center">Status</th>
+                        @if(auth()->user()->role !== 'SISWA')
                             <th class="py-3 px-4 text-center">Aksi</th>
-                        @else
-                            <th class="py-3 px-4 text-center">Status Konseling</th>
                         @endif
                     </tr>
                 </thead>
@@ -118,50 +114,62 @@
                 {{-- BODY TABEL --}}
                 <tbody class="divide-y divide-slate-700 bg-slate-800 text-gray-300">
                     @php $hasData = false; @endphp
-
                     @foreach($konseling as $item)
                         @php $hasData = true; @endphp
-
                         <tr class="hover:bg-slate-700 transition">
                             <td class="py-3 px-4">{{ $item->nama_siswa }}</td>
                             <td class="py-3 px-4">{{ $item->kelas }}</td>
+                            <td class="py-3 px-4">{{ $item->absen ?? '-' }}</td>
                             <td class="py-3 px-4">{{ $item->tanggal }}</td>
-
-                            @if(auth()->user()->role === 'GURU_BK' || auth()->user()->role === 'ADMIN')
+                            <td class="py-3 px-4">{{ $item->jam_mulai ? \Carbon\Carbon::parse($item->jam_mulai)->format('H:i') : '-' }} - {{ $item->jam_selesai ? \Carbon\Carbon::parse($item->jam_selesai)->format('H:i') : '-' }}</td>
+                            @if(auth()->user()->role !== 'SISWA')
                                 <td class="py-3 px-4">{{ $item->permasalahan }}</td>
                             @endif
-
                             <td class="py-3 px-4">{{ $item->guru_bk }}</td>
 
-                            {{-- STATUS --}}
+                            {{-- STATUS + ALASAN PENOLAKAN --}}
                             <td class="py-3 px-4 text-center">
                                 <span class="px-3 py-1 text-sm font-semibold rounded-full
                                     @if($item->status == 'pending') bg-yellow-600 text-yellow-100
-                                    @elseif($item->status == 'selesai') bg-green-600 text-green-100
+                                    @elseif($item->status == 'setuju') bg-green-600 text-white
+                                    @elseif($item->status == 'selesai') bg-green-600 text-white
+                                    @elseif($item->status == 'tolak') bg-red-600 text-red-100
                                     @else bg-gray-600 text-gray-100
                                     @endif">
                                     {{ ucfirst($item->status) }}
                                 </span>
+
+                                @if($item->alasan_penolakan)
+                                    <div class="mt-2 text-sm text-red-800 bg-red-100 rounded-lg px-3 py-2 inline-block max-w-xs break-words shadow-sm">
+                                        <strong>Alasan:</strong> {{ $item->alasan_penolakan }}
+                                    </div>
+                                @endif
                             </td>
 
-                            {{-- AKSI (HANYA GURU BK & ADMIN) --}}
-                            @if(auth()->user()->role === 'GURU_BK' || auth()->user()->role === 'ADMIN')
-                                <td class="py-3 px-4 text-center flex gap-2 justify-center">
+                            {{-- AKSI --}}
+                            @if(auth()->user()->role !== 'SISWA')
+                                <td class="py-3 px-4 text-center flex gap-2 justify-center flex-wrap">
 
-                                    {{-- Tombol ACC --}}
+                                    {{-- Setuju --}}
                                     @if($item->status == 'pending')
                                         <form action="{{ route('konseling.updateStatus', $item->id) }}"
                                               method="POST"
-                                              onsubmit="return confirm('Acc ajuan konseling ini?');">
+                                              onsubmit="return confirm('Setuju ajuan konseling ini?');">
                                             @csrf
                                             <button type="submit"
                                                     class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg">
-                                                Acc
+                                                ✅ Setuju
                                             </button>
                                         </form>
+
+                                        {{-- TOLAK --}}
+                                        <button onclick="openTolakModal({{ $item->id }})"
+                                                class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg">
+                                            ❌ Tolak
+                                        </button>
                                     @endif
 
-                                    {{-- Tombol Hapus --}}
+                                    {{-- HAPUS --}}
                                     <form action="{{ route('konseling.destroy', $item->id) }}"
                                           method="POST"
                                           onsubmit="return confirm('Hapus data ini?');">
@@ -169,19 +177,20 @@
                                         @method('DELETE')
                                         <button type="submit"
                                                 class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg">
-                                            Hapus
+                                            🗑️ Hapus
                                         </button>
                                     </form>
 
                                 </td>
                             @endif
+
                         </tr>
                     @endforeach
 
                     {{-- EMPTY STATE --}}
                     @if(!$hasData)
                         <tr>
-                            <td colspan="{{ auth()->user()->role === 'SISWA' ? 5 : 7 }}"
+                            <td colspan="{{ auth()->user()->role === 'SISWA' ? 7 : 9 }}"
                                 class="py-8 text-center text-lg text-gray-400">
                                 {{ auth()->user()->role === 'SISWA'
                                     ? 'Anda belum mengajukan data konseling.'
@@ -194,6 +203,48 @@
             </table>
         </div>
     </div>
+
+{{-- SWEETALERT TOLAK --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+function openTolakModal(id) {
+    Swal.fire({
+        title: 'Alasan Penolakan',
+        input: 'textarea',
+        inputPlaceholder: 'Masukkan alasan penolakan...',
+        showCancelButton: true,
+        confirmButtonText: 'Tolak',
+        cancelButtonText: 'Batal',
+        inputValidator: (value) => {
+            if (!value) {
+                return 'Alasan penolakan tidak boleh kosong!'
+            }
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/konseling/${id}/tolak`;
+
+            let csrf = document.createElement('input');
+            csrf.type = 'hidden';
+            csrf.name = '_token';
+            csrf.value = '{{ csrf_token() }}';
+
+            let alasan = document.createElement('input');
+            alasan.type = 'hidden';
+            alasan.name = 'alasan_penolakan';
+            alasan.value = result.value;
+
+            form.appendChild(csrf);
+            form.appendChild(alasan);
+            document.body.appendChild(form);
+
+            form.submit();
+        }
+    });
+}
+</script>
 
 </body>
 </html>

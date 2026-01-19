@@ -10,12 +10,12 @@ class SiswaSeeder extends Seeder
 {
     public function run()
     {
-        User::create([
-            'name' => 'Dicky',
-            'email' => 'dicky@gmail.com',
-            'password' => Hash::make('password123'),
-            'role' => 'SISWA',
-        ]);
+        // User::create([
+        //     'name' => 'Dicky',
+        //     'email' => 'dicky@gmail.com',
+        //     'password' => Hash::make('password123'),
+        //     'role' => 'SISWA',
+        // ]);
 
         User::create([
             'name' => 'satrya',

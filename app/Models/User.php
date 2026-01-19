@@ -19,6 +19,7 @@ class User extends Authenticatable
         'email',
         'role',      // role: 'GURU_BK', 'ADMIN', atau 'SISWA'
         'password',
+        'kelas_id',
     ];
 
     /**

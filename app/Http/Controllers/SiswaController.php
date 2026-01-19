@@ -10,7 +10,8 @@ class SiswaController extends Controller
 {
     public function index()
     {
-        $siswas = Siswa::latest()->paginate(10);
+        // 🔥 PENTING: TANPA PAGINATION
+        $siswas = Siswa::latest()->get();
         return view('siswa.index', compact('siswas'));
     }
 
@@ -84,6 +85,7 @@ class SiswaController extends Controller
         }
 
         $siswa->delete();
+
         return redirect()->route('siswa.index')->with('success', 'Data siswa berhasil dihapus.');
     }
 }

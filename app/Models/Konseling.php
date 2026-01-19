@@ -12,9 +12,13 @@ class Konseling extends Model
     protected $fillable = [
         'nama_siswa',
         'kelas',
+        'absen',
         'tanggal',
+        'jam_mulai',
+        'jam_selesai',
         'permasalahan',
         'guru_bk',
         'status',
+        'alasan_penolakan',
     ];
 }

@@ -8,5 +8,5 @@ class Prestasi extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nama_siswa', 'kelas', 'jurusan', 'prestasi', 'tahun'];
+    protected $fillable = ['nama_siswa', 'kelas', 'jurusan', 'prestasi', 'tingkat', 'tahun', 'bukti'];
 }

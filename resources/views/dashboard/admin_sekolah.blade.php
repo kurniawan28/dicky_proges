@@ -43,49 +43,6 @@
 
   <div class="flex min-h-screen">
 
-    <!-- Sidebar -->
-    <aside class="w-64 bg-[#0b1a2b]/70 backdrop-blur-lg shadow-xl p-6 sticky top-0 h-screen rounded-tr-2xl rounded-br-2xl">
-      <nav class="space-y-3">
-  <a href="{{ route('dashboard.kepsek') }}" 
-     class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#3fc1c9]/20 hover:border-[#3fc1c9] hover:shadow-[0_0_15px_rgba(63,193,201,0.5)] hover:scale-[1.03] transition-all duration-300 text-[#3fc1c9] font-semibold">
-     <span class="ml-1">🏠 Dashboard</span>
-  </a>
-
-  <a href="{{ route('monitoring.index') }}" 
-     class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#4de0ff]/20 hover:border-[#4de0ff] hover:shadow-[0_0_15px_rgba(77,224,255,0.5)] hover:scale-[1.03] transition-all duration-300 text-[#4de0ff] font-semibold">
-     <span class="ml-1">📖 Pelanggaran Siswa</span>
-  </a>
-
-  <a href="{{ route('prestasi.index') }}" 
-     class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#ffe066]/20 hover:border-[#ffe066] hover:shadow-[0_0_15px_rgba(255,224,102,0.5)] hover:scale-[1.03] transition-all duration-300 text-[#ffe066] font-semibold">
-     <span class="ml-1">🎖️ Prestasi Siswa</span>
-  </a>
-
-  <a href="{{ route('konseling.index') }}" 
-     class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#b388eb]/20 hover:border-[#b388eb] hover:shadow-[0_0_15px_rgba(179,136,235,0.5)] hover:scale-[1.03] transition-all duration-300 text-[#b388eb] font-semibold">
-     <span class="ml-1">💬 Daftar Konseling</span>
-  </a>
-
-<a href="/chat-bk" 
-   class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#3fc1c9]/20 
-   hover:border-[#3fc1c9] hover:shadow-[0_0_15px_rgba(63,193,201,0.5)] 
-   hover:scale-[1.03] transition-all duration-300 text-cyan-300 font-semibold">
-   <span class="ml-1">🤖 Chat BK (AI)</span>
-</a>
-
-  <a href="{{ route('visi-misi') }}" 
-   class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#ff6b6b]/20 
-   hover:border-[#ff6b6b] hover:shadow-[0_0_15px_rgba(255,107,107,0.5)] 
-   hover:scale-[1.03] transition-all duration-300 text-[#ff6b6b] font-semibold">
-   <span class="ml-1">📜 Visi & Misi</span>
-
-
-
-</a>
-
-</nav>
-
-    </aside>
 
     <!-- Main Content -->
     <main class="flex-1 p-10">
@@ -127,7 +84,30 @@
     <p class="text-gray-200 text-sm">📜 Visi & Misi Sekolah</p>
   </a>
 
- 
+ <a href="{{ route('statistik.index') }}" 
+   class="p-6 glow-card text-white text-center shadow-xl transition-smooth"
+   style="background-color:#0B1828;">
+    <div class="text-5xl mb-4"></div>
+    <h2 class="text-xl font-semibold mb-2 text-green-300">
+        STATISTIK PELANGGARAN
+    </h2>
+    <p class="text-gray-200 text-sm">
+        Analisis pelanggaran siswa berdasarkan kategori
+    </p>
+</a>
+
+<a href="{{ route('siswa.index') }}" 
+   class="p-6 glow-card text-white text-center shadow-xl transition-smooth"
+   style="background-color:#0B1828;">
+    <div class="text-5xl mb-4"></div>
+    <h2 class="text-xl font-semibold mb-2 text-green-300">
+        DATA SISWA
+    </h2>
+    <p class="text-gray-200 text-sm">
+        Daftar lengkap siswa SMK Antartika 1 Sidoarjo
+    </p>
+</a>
+
 
 </div>
      <!-- Footer Sosmed -->
