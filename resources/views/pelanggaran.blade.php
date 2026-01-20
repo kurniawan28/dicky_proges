@@ -74,8 +74,13 @@ body {
         class="mb-8 grid grid-cols-1 md:grid-cols-6 gap-4">
     @csrf
 
-    <input type="text" name="nama_siswa" placeholder="Nama Siswa" required
+    <select name="nama_siswa" required
       class="p-3 rounded-lg bg-slate-800 text-gray-200 border border-slate-700">
+      <option value="">Pilih Siswa</option>
+      @foreach($siswas as $siswa)
+        <option value="{{ $siswa->name }}">{{ $siswa->name }}</option>
+      @endforeach
+    </select>
 
     <input type="text" name="kelas" placeholder="Kelas dan absen" required
       class="p-3 rounded-lg bg-slate-800 text-gray-200 border border-slate-700">
@@ -166,6 +171,9 @@ body {
 
           <td class="py-3 px-4 text-center">
             @if(auth()->user()->role === 'GURU_BK' || auth()->user()->role === 'ADMIN')
+            <a href="{{ route('pelanggaran.edit', $item->id) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-lg mr-2 inline-block">
+                Edit
+            </a>
             <form action="{{ route('pelanggaran.destroy',$item->id) }}" method="POST" style="display:inline;">
               @csrf
               @method('DELETE')

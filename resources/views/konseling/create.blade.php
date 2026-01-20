@@ -81,7 +81,7 @@
           <label class="block text-cyan-200 mb-2 font-medium">Jam Mulai</label>
           <div class="grid grid-cols-2 gap-2">
             <select name="jam_mulai_hour" id="jam_mulai_hour" required class="bg-[#0b1a2b]/70 border border-cyan-400/30 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-cyan-400 focus:outline-none">
-              <option value="">-- Jam --</option>
+              <option value="">Jam</option>
               <option value="07">07</option>
               <option value="08">08</option>
               <option value="09">09</option>
@@ -101,7 +101,7 @@
           <label class="block text-cyan-200 mb-2 font-medium">Jam Selesai</label>
           <div class="grid grid-cols-2 gap-2">
             <select name="jam_selesai_hour" id="jam_selesai_hour" required class="bg-[#0b1a2b]/70 border border-cyan-400/30 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-cyan-400 focus:outline-none">
-              <option value="">-- Jam --</option>
+              <option value="">Jam</option>
               <option value="07">07</option>
               <option value="08">08</option>
               <option value="09">09</option>
@@ -129,9 +129,13 @@
       <!-- Guru BK -->
       <div>
         <label class="block text-cyan-200 mb-2 font-medium">Guru BK</label>
-        <input type="text" name="guru_bk" required
-               placeholder="Masukkan nama guru BK"
-               class="w-full bg-[#0b1a2b]/70 border border-cyan-400/30 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-cyan-400 focus:outline-none">
+        <select name="guru_bk" required
+                class="w-full bg-[#0b1a2b]/70 border border-cyan-400/30 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-cyan-400 focus:outline-none">
+          <option value="">Pilih Guru BK</option>
+          <option value="Bu Prapti">Bu Prapti</option>
+          <option value="Bu Eka">Bu Eka</option>
+          <option value="Bu Pur">Bu Pur</option>
+        </select>
       </div>
 
       <!-- Submit -->

@@ -54,6 +54,7 @@ Route::middleware('auth')->group(function () {
 
         // Pelanggaran CRUD
         Route::post('/pelanggaran', [PelanggaranController::class, 'store'])->name('pelanggaran.store');
+        Route::get('/pelanggaran/{id}/edit', [PelanggaranController::class, 'edit'])->name('pelanggaran.edit');
         Route::put('/pelanggaran/{id}', [PelanggaranController::class, 'update'])->name('pelanggaran.update');
         Route::delete('/pelanggaran/{id}', [PelanggaranController::class, 'destroy'])->name('pelanggaran.destroy');
 

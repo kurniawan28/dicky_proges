@@ -16,64 +16,95 @@
     --blue: #3b82f6;
     --text-soft: #c7d2fe;
     --border-glow: rgba(34,231,255,0.45);
+
+    --container: 1280px;
+    --side-gap: 56px;
+    --nav-h: 96px;
 }
 
+/* RESET */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* LOCK VIEWPORT */
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* BODY */
 body {
-    min-height: 100vh;
     font-family: 'Inter', sans-serif;
     background: radial-gradient(circle at top, var(--bg-2), var(--bg-1));
     color: #fff;
 }
 
-/* ================= NAVBAR ================= */
-nav {
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* CONTAINER */
+.container {
+    width: 100%;
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 var(--side-gap);
 }
 
+/* ================= NAVBAR ================= */
+nav {
+    height: var(--nav-h);
+    display: flex;
+    align-items: center;
+}
+
+/* LOGO WRAP */
 .logo-wrap {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 18px;
+
+    /* turunkan secara OPTIKAL, bukan struktural */
+    transform: translateY(60px);
 }
 
+/* LOGO */
 .logo-wrap img {
-    width: 75px;
-    height: 75px;
-    object-fit: cover;        /* biar isi penuh lingkaran */
-    border-radius: 50%;       /* bikin BULAT */
-    background: #0f1335;      /* aman kalau PNG transparan */
-    padding: 4px;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    padding: 6px;
+    background: var(--card);
     box-shadow:
-        0 0 12px rgba(34,231,255,0.9),
-        0 0 25px rgba(34,231,255,0.6);
+        0 0 14px rgba(34,231,255,0.85),
+        0 0 26px rgba(34,231,255,0.6);
+}
+
+/* TEKS LOGO */
+.logo-wrap span {
+    line-height: 1;        /* biar teks tidak "naik" */
+    display: flex;
+    align-items: center;
 }
 
 
+/* LOGO TEXT */
 .logo-wrap span {
     font-family: 'Orbitron', sans-serif;
     font-size: 1.9rem;
     letter-spacing: 2px;
     color: var(--cyan);
-    text-shadow: 0 0 18px rgba(34,231,255,0.9);
+    text-shadow: 0 0 18px rgba(34,231,255,0.85);
 }
 
 /* ================= HERO ================= */
 .hero {
-    min-height: calc(100vh - 80px);
+    height: calc(100vh - var(--nav-h));
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 80px;
-    padding: 80px;
+    grid-template-columns: 1.15fr 0.85fr;
     align-items: center;
+    gap: 64px;
 }
 
 /* LEFT */
@@ -83,16 +114,15 @@ nav {
     border-radius: 999px;
     border: 1px solid var(--border-glow);
     color: var(--cyan);
-    font-size: 0.8rem;
-    margin-bottom: 22px;
-    box-shadow: 0 0 15px rgba(34,231,255,0.4);
+    font-size: 0.78rem;
+    margin-bottom: 18px;
 }
 
 .hero-left h1 {
-    font-size: 3.1rem;
-    line-height: 1.2;
+    font-size: 2.9rem;
+    line-height: 1.15;
     font-weight: 800;
-    margin-bottom: 22px;
+    margin-bottom: 18px;
 }
 
 .hero-left h1 strong {
@@ -102,86 +132,89 @@ nav {
 
 .hero-left p {
     color: var(--text-soft);
-    line-height: 1.9;
-    margin-bottom: 38px;
+    line-height: 1.75;
+    margin-bottom: 30px;
+    max-width: 92%;
 }
 
 .hero-btns {
     display: flex;
-    gap: 18px;
+    gap: 16px;
+}
+
+/* BUTTONS */
+.btn-main,
+.btn-outline {
+    padding: 13px 36px;
+    border-radius: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.25s ease;
 }
 
 .btn-main {
-    padding: 14px 38px;
-    border-radius: 14px;
     background: linear-gradient(90deg, var(--cyan), var(--blue));
     color: #000;
-    font-weight: 700;
-    text-decoration: none;
-    box-shadow: 0 0 28px rgba(34,231,255,0.9);
-    transition: 0.3s;
+    box-shadow: 0 0 26px rgba(34,231,255,0.9);
 }
 
 .btn-main:hover {
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 0 45px rgba(34,231,255,1);
+    transform: translateY(-2px);
 }
 
 .btn-outline {
-    padding: 14px 38px;
-    border-radius: 14px;
     border: 1px solid var(--border-glow);
     color: var(--cyan);
-    text-decoration: none;
-    font-weight: 600;
-    transition: 0.3s;
 }
 
 .btn-outline:hover {
     background: rgba(34,231,255,0.12);
-    box-shadow: 0 0 30px rgba(34,231,255,0.6);
 }
 
 /* ================= CARD ================= */
 .hero-card {
     background: linear-gradient(180deg, #0e133a, #0a0e2a);
-    border-radius: 30px;
-    padding: 40px;
+    border-radius: 26px;
+    padding: 28px;
     border: 2px solid var(--border-glow);
     box-shadow:
-        0 0 30px rgba(34,231,255,0.45),
-        inset 0 0 35px rgba(34,231,255,0.15);
+        0 0 26px rgba(34,231,255,0.45),
+        inset 0 0 28px rgba(34,231,255,0.15);
 }
 
 .card-item {
+    padding: 16px 18px;
+    border-radius: 16px;
     background: rgba(255,255,255,0.05);
-    padding: 22px;
-    border-radius: 18px;
-    margin-bottom: 18px;
     border: 1px solid rgba(34,231,255,0.25);
+}
+
+.card-item:not(:last-child) {
+    margin-bottom: 14px;
 }
 
 .card-item h3 {
     color: var(--cyan);
-    margin-bottom: 8px;
-    font-size: 1.05rem;
+    font-size: 0.98rem;
+    margin-bottom: 6px;
 }
 
 .card-item p {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
     color: var(--text-soft);
-    line-height: 1.6;
 }
 
-/* ================= RESPONSIVE ================= */
-@media(max-width: 900px) {
-    .hero {
-        grid-template-columns: 1fr;
-        padding: 40px 26px;
+/* ================= MOBILE ================= */
+@media (max-width: 900px) {
+    html, body {
+        overflow: auto;
     }
 
-    .hero-left h1 {
-        font-size: 2.3rem;
+    .hero {
+        grid-template-columns: 1fr;
+        height: auto;
+        padding-bottom: 40px;
     }
 }
 </style>
@@ -190,29 +223,30 @@ nav {
 <body>
 
 <nav>
-    <div class="logo-wrap">
-        <img src="{{ asset('images/antrek1.png') }}" alt="Logo SMK Antartika 1 Sidoarjo">
-        <span>BK APP</span>
+    <div class="container">
+        <div class="logo-wrap">
+            <img src="{{ asset('images/antrek1.png') }}" alt="Logo SMK Antartika 1 Sidoarjo">
+            <span>BK APP</span>
+        </div>
     </div>
 </nav>
 
-<section class="hero">
+<section class="container hero">
 
     <!-- LEFT -->
     <div class="hero-left">
         <span>SMK ANTARTIKA 1 SIDOARJO</span>
 
         <h1>
-            Sistem Bimbingan Konseling <br>
+            Sistem Bimbingan Konseling<br>
             <strong>Modern & Terintegrasi</strong>
         </h1>
 
         <p>
             BK App adalah sistem bimbingan konseling digital
-            yang dirancang untuk membantu siswa, guru BK,
-            dan pihak sekolah dalam memantau, membimbing,
-            serta menyelesaikan permasalahan siswa secara
-            profesional, aman, dan terstruktur.
+            yang membantu siswa dan guru BK dalam proses
+            pendampingan, pembinaan, dan penyelesaian
+            permasalahan siswa secara profesional.
         </p>
 
         <div class="hero-btns">
@@ -226,41 +260,22 @@ nav {
 
         <div class="card-item">
             <h3>🏫 Tentang Sekolah</h3>
-            <p>
-                SMK Antartika 1 Sidoarjo merupakan sekolah
-                menengah kejuruan yang berfokus pada
-                pendidikan vokasi, pembinaan karakter,
-                dan kesiapan kerja di dunia industri.
-            </p>
+            <p>SMK Antartika 1 Sidoarjo berfokus pada pendidikan vokasi dan karakter.</p>
         </div>
 
         <div class="card-item">
-            <h3>🧠 Apa Itu Bimbingan Konseling?</h3>
-            <p>
-                Bimbingan dan Konseling (BK) adalah layanan
-                pendampingan siswa untuk membantu memahami
-                diri, mengembangkan potensi, serta mengatasi
-                masalah pribadi, sosial, dan akademik.
-            </p>
+            <h3>🧠 Bimbingan Konseling</h3>
+            <p>Layanan pendampingan siswa dalam aspek pribadi, sosial, dan akademik.</p>
         </div>
 
         <div class="card-item">
-            <h3>📌 Jenis Layanan Konseling</h3>
-            <p>
-                Layanan BK meliputi konseling pribadi,
-                sosial, belajar, dan karier guna membantu
-                siswa berkembang secara mental, akademik,
-                dan perencanaan masa depan.
-            </p>
+            <h3>📌 Jenis Layanan</h3>
+            <p>Konseling pribadi, sosial, belajar, dan perencanaan karier.</p>
         </div>
 
         <div class="card-item">
-            <h3>🎯 Tujuan Layanan BK</h3>
-            <p>
-                Membentuk siswa yang disiplin, bertanggung jawab,
-                percaya diri, dan mampu mengambil keputusan
-                yang tepat dalam kehidupan sekolah maupun masa depan.
-            </p>
+            <h3>🎯 Tujuan BK</h3>
+            <p>Membentuk siswa disiplin, percaya diri, dan bertanggung jawab.</p>
         </div>
 
     </div>

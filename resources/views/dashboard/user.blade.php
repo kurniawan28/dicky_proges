@@ -6,6 +6,7 @@
   <title>Dashboard BK Sekolah</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     /* Glow effect untuk card */
     .glow-card {
@@ -96,7 +97,9 @@
       <footer class="bg-[#0b1a2b]/80 backdrop-blur-lg text-gray-200 text-center py-8 mt-16 rounded-xl">
 
         <p class="mb-3 font-medium">
-          Selamat datang di website SMK ANTARTIKA 1 SIDOARJO. Semoga informasi ini bermanfaat bagi siswa, orang tua, dan guru.
+         Selamat datang di website Bimbingan Konseling SMK ANTARTIKA 1 SIDOARJO.
+         Website ini disediakan sebagai media layanan informasi dan pendampingan bagi siswa dalam bidang akademik, pribadi dan sosial. 
+         Melalui layanan Bimbingan Konseling, kami siap membantu siswa dalam mengembangkan potensi diri serta menyelesaikan permasalahan secara positif dan bertanggung jawab.
         </p>
         <p class="mb-3 font-medium">Mencetak generasi unggul dan berakhlak mulia.</p>
 
@@ -121,5 +124,20 @@
 
     </main>
   </div>
+
+  @if(session('success'))
+  <script>
+    Swal.fire({
+      title: 'Berhasil!',
+      text: "{{ session('success') }}",
+      icon: 'success',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#3085d6',
+      background: '#0f2027', 
+      color: '#fff'
+    });
+  </script>
+  @endif
+
 </body>
 </html>

@@ -6,17 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void
-    {
-        Schema::table('siswas', function (Blueprint $table) {
-            if (!Schema::hasColumn('siswas', 'no_absen')) {
-                $table->string('no_absen')->unique()->after('id');
-            }
-            if (!Schema::hasColumn('siswas', 'status_absen')) {
-                $table->enum('status_absen', ['Hadir','Tidak Hadir','Izin','Sakit'])->default('Hadir')->after('no_hp');
-            }
-        });
-    }
+    //public function up(): void
+    //{
+       // Schema::table('siswas', function (Blueprint $table) {
+         //   if (!Schema::hasColumn('siswas', 'no_absen')) {
+           //     $table->string('no_absen')->unique()->after('id');
+           // }
+           // if (!Schema::hasColumn('siswas', 'status_absen')) {
+           //     $table->enum('status_absen', ['Hadir','Tidak Hadir','Izin','Sakit'])->default('Hadir')->after('no_hp');
+         //  }
+       // });
+   // }
 
     public function down(): void
     {

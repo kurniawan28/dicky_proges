@@ -105,7 +105,7 @@ body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #
           <td class="py-3 px-4">{{ $item->tahun }}</td>
           <td class="py-3 px-4">
             @if($item->bukti)
-              <img src="{{ asset('storage/uploads/prestasi/' . $item->bukti) }}" class="w-24 h-24 object-cover rounded-lg border border-slate-600 hover:scale-105 transition cursor-pointer" onclick="openImageModal('{{ asset('storage/uploads/prestasi/' . $item->bukti) }}')" alt="Bukti Prestasi">
+              <img src="{{ Storage::url('uploads/prestasi/' . $item->bukti) }}" class="w-24 h-24 object-cover rounded-lg border border-slate-600 hover:scale-105 transition cursor-pointer" onclick="openImageModal('{{ Storage::url('uploads/prestasi/' . $item->bukti) }}')" alt="Bukti Prestasi">
             @else
               <span class="text-gray-500">-</span>
             @endif
