@@ -26,6 +26,11 @@ class SanctionService
         // Calculate total points from Pelanggaran table
         $totalPoin = Pelanggaran::where('nama_siswa', $namaSiswa)->sum('poin');
 
+        // Batasi poin maksimal 100
+        if ($totalPoin > 100) {
+            $totalPoin = 100;
+        }
+
         // Determine category
         $kategori = $this->determineCategory($totalPoin);
 

@@ -44,7 +44,7 @@
 
 <nav class="fixed top-0 left-0 right-0 bg-slate-900/80 backdrop-blur-md border-b border-slate-700 p-4 flex justify-between items-center px-6 z-50 h-20">
     <a href="{{ route('dashboard') }}" class="text-xl font-semibold text-white flex items-center gap-2">
-        🏫 Sistem BK Sekolah
+        🏫 dashboard
     </a>
     <form action="{{ route('logout') }}" method="POST">
         @csrf

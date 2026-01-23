@@ -64,6 +64,12 @@
     <p class="text-gray-200 text-sm">Daftar prestasi siswa</p>
   </a>
 
+  <a href="{{ route('absensi.index') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
+    <div class="text-5xl mb-4"></div>
+    <h2 class="text-xl font-semibold mb-2 text-orange-300">DATA ABSENSI</h2>
+    <p class="text-gray-200 text-sm">Laporan absensi siswa</p>
+  </a>
+
   <a href="{{ route('konseling.index') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
     <div class="text-5xl mb-4"></div>
     <h2 class="text-xl font-semibold mb-2 text-purple-300">JADWAL KONSELING</h2>

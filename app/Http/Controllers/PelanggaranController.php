@@ -31,29 +31,26 @@ class PelanggaranController extends Controller
             $pelanggaran = Pelanggaran::with('siswa')->get();
         }
 
-        // Daftar siswa valid sesuai request user (Whitelist)
-        $validNames = [
-            "ACHMAD DEVANI RIZQY PRATAMA SETIYAWAN", "AFRIZAL DANI FERDIANSYAH", "AHMAD ZAKY FAZA", "ANDHI LUKMAN SYAH TJAHJONO",
-            "BRYAN ANDRIY SHEVCENKO", "CATHERINE ABIGAIL APRILLIA CANDYSE", "CHELSEA NAYLIXA AZKA", "DAFFA MAULANA WIJAYA",
-            "DENICO TUESDY OESMAΝΑ", "DILAN ALAUDIN AMRU", "DIMAS SATRYA IRAWAN", "FADHIL SURYA BUANA", "FAIS FAISHAL HAKIM",
-            "FARDAN HABIBI", "FAREL DWI NUGROHO", "FATCHUR ROCHMAN", "GALANG ARIVIANTO", "HANIFA MAULITA ZAHRA SAFFUDIN",
-            "KENZA EREND PUTRA TAMA", "KHOFIFI AKBAR INDRATAΜΑ", "LUBNA AQIILA SALSABIL", "M. AZRIEL ANHAR",
-            "MARCHELIN EKA FRIANTISA", "MAULANA RIDHO RAMADHAN", "MOCH. DICKY KURNIAWAN", "MOCHAMMAD ALIF RIZKY FADHILAH",
-            "MOCHAMMAD FAJRI HARIANTO", "MOCHAMMAD VALLEN NUR RIZKI PRADANA", "MOH. WIJAYA ANDIKA SAPUTRA",
-            "MUHAMAD FATHUL HADI", "MUHAMMAD FAIRUZ ZAIDAN", "MUHAMMAD IDRIS", "MUHAMMAD MIKAIL KAROMATULLAH",
-            "NASRULLAH AL AMIN", "NOVAN WAHYU HIDAYAT", "NUR AVIVAH MAULUD DIAH", "QODAMA MAULANA YUSUF",
-            "RASSYA RAJA ISLAMI NOVEANSYAH", "RAYHAN ALIF PRATAMA", "RENDI SATRIA NUGROHO WICAKSANA",
-            "RESTU CANDRA NOVIANTO", "RONI KURNIASANDY", "SATRYA PRAMUDYA ANANDITA"
-        ];
-
-        // Ambil user dengan role SISWA dan namanya ada di daftar valid
-        $siswas = User::where('role', 'SISWA')
-                      ->whereIn('name', $validNames)
-                      ->orderBy('name')
-                      ->get();
-
         $isAdmin = $user->role === 'GURU_BK' || $user->role === 'ADMIN'; 
-        return view('pelanggaran', compact('pelanggaran', 'isAdmin', 'siswas'));
+
+        // Ambil daftar siswa yang memiliki pelanggaran (distinct) untuk dropdown reset
+        $siswaMelanggar = [];
+        if ($isAdmin) {
+            $siswaMelanggar = Pelanggaran::select('nama_siswa')->distinct()->pluck('nama_siswa');
+        }
+
+        // Cek peringatan untuk siswa jika poin >= 100
+        $studentWarning = null;
+        if ($user->role === 'SISWA') {
+             // Hitung poin langsung dari tabel pelanggaran agar akurat
+             $totalPoinSiswa = Pelanggaran::where('nama_siswa', $user->name)->sum('poin');
+             
+             if ($totalPoinSiswa >= 100) {
+                 $studentWarning = "Peringatan dari Guru BK: Poin pelanggaranmu sudah mencapai batas (100). Segera temui Guru BK di ruangannya untuk penyelesaian masalah.";
+             }
+        }
+
+        return view('pelanggaran', compact('pelanggaran', 'isAdmin', 'siswaMelanggar', 'studentWarning'));
     }
 
     // Tambah pelanggaran baru (Admin Only)
@@ -68,17 +65,23 @@ class PelanggaranController extends Controller
             'tanggal' => 'required|date',
         ]);
 
+        // Cek apakah poin siswa sudah mencapai 100
+        $currentPoints = Pelanggaran::where('nama_siswa', $request->nama_siswa)->sum('poin');
+        if ($currentPoints >= 100) {
+            return redirect()->back()->with('error', 'GAGAL: Poin siswa ini sudah mencapai batas maksimum (100). Silakan RESET poin terlebih dahulu jika ingin menambah pelanggaran baru.');
+        }
+
         // Tentukan kategori dan sanksi otomatis berdasarkan poin
         $kategori = 'ringan';
         $sanksi = 'Aman';
         if ($request->poin >= 100) {
             $kategori = 'berat';
-            $sanksi = 'Skorsing';
+            $sanksi = 'peringatan 3';
         } elseif ($request->poin >= 50) {
             $kategori = 'sedang';
-            $sanksi = 'Peringatan 2';
+            $sanksi = 'peringatan 2';
         } else {
-            $sanksi = 'Peringatan 1';
+            $sanksi = 'peringatan 1';
         }
 
         Pelanggaran::create([
@@ -95,6 +98,12 @@ class PelanggaranController extends Controller
         // Update sanksi siswa
         $this->sanctionService->updateSiswaSanction($request->nama_siswa);
 
+        // Cek jika poin mencapai batas 100
+        $siswa = \App\Models\Siswa::where('nama_lengkap', $request->nama_siswa)->first();
+        if ($siswa && $siswa->total_poin >= 100) {
+            return redirect()->back()->with('success', 'Pelanggaran berhasil ditambahkan')->with('points_limit_reached', 'Siswa mencapai batas poin 100! Segera temui Guru BK untuk konseling dan penyelesaian masalah.');
+        }
+
         return redirect()->back()->with('success', 'Pelanggaran berhasil ditambahkan');
     }
 
@@ -103,28 +112,7 @@ class PelanggaranController extends Controller
     {
         $pelanggaran = Pelanggaran::findOrFail($id);
         
-        // Daftar siswa valid sesuai request user (Whitelist) - reused
-        $validNames = [
-            "ACHMAD DEVANI RIZQY PRATAMA SETIYAWAN", "AFRIZAL DANI FERDIANSYAH", "AHMAD ZAKY FAZA", "ANDHI LUKMAN SYAH TJAHJONO",
-            "BRYAN ANDRIY SHEVCENKO", "CATHERINE ABIGAIL APRILLIA CANDYSE", "CHELSEA NAYLIXA AZKA", "DAFFA MAULANA WIJAYA",
-            "DENICO TUESDY OESMAΝΑ", "DILAN ALAUDIN AMRU", "DIMAS SATRYA IRAWAN", "FADHIL SURYA BUANA", "FAIS FAISHAL HAKIM",
-            "FARDAN HABIBI", "FAREL DWI NUGROHO", "FATCHUR ROCHMAN", "GALANG ARIVIANTO", "HANIFA MAULITA ZAHRA SAFFUDIN",
-            "KENZA EREND PUTRA TAMA", "KHOFIFI AKBAR INDRATAΜΑ", "LUBNA AQIILA SALSABIL", "M. AZRIEL ANHAR",
-            "MARCHELIN EKA FRIANTISA", "MAULANA RIDHO RAMADHAN", "MOCH. DICKY KURNIAWAN", "MOCHAMMAD ALIF RIZKY FADHILAH",
-            "MOCHAMMAD FAJRI HARIANTO", "MOCHAMMAD VALLEN NUR RIZKI PRADANA", "MOH. WIJAYA ANDIKA SAPUTRA",
-            "MUHAMAD FATHUL HADI", "MUHAMMAD FAIRUZ ZAIDAN", "MUHAMMAD IDRIS", "MUHAMMAD MIKAIL KAROMATULLAH",
-            "NASRULLAH AL AMIN", "NOVAN WAHYU HIDAYAT", "NUR AVIVAH MAULUD DIAH", "QODAMA MAULANA YUSUF",
-            "RASSYA RAJA ISLAMI NOVEANSYAH", "RAYHAN ALIF PRATAMA", "RENDI SATRIA NUGROHO WICAKSANA",
-            "RESTU CANDRA NOVIANTO", "RONI KURNIASANDY", "SATRYA PRAMUDYA ANANDITA"
-        ];
-
-        // Ambil user dengan role SISWA dan namanya ada di daftar valid
-        $siswas = User::where('role', 'SISWA')
-                      ->whereIn('name', $validNames)
-                      ->orderBy('name')
-                      ->get();
-
-        return view('pelanggaran.edit', compact('pelanggaran', 'siswas'));
+        return view('pelanggaran.edit', compact('pelanggaran'));
     }
 
     // Update pelanggaran (Admin Only)
@@ -147,12 +135,12 @@ class PelanggaranController extends Controller
         $sanksi = 'Aman';
         if ($request->poin >= 100) {
             $kategori = 'berat';
-            $sanksi = 'Skorsing';
+            $sanksi = 'peringatan 3';
         } elseif ($request->poin >= 50) {
             $kategori = 'sedang';
-            $sanksi = 'Peringatan 2';
+            $sanksi = 'peringatan 2';
         } else {
-            $sanksi = 'Peringatan 1';
+            $sanksi = 'peringatan 1';
         }
 
         $pelanggaran->update([
@@ -170,6 +158,12 @@ class PelanggaranController extends Controller
         $this->sanctionService->updateSiswaSanction($request->nama_siswa);
         if ($oldNamaSiswa !== $request->nama_siswa) {
             $this->sanctionService->updateSiswaSanction($oldNamaSiswa);
+        }
+
+        // Cek jika poin mencapai batas 100
+        $siswa = \App\Models\Siswa::where('nama_lengkap', $request->nama_siswa)->first();
+        if ($siswa && $siswa->total_poin >= 100) {
+           return redirect()->route('monitoring.index')->with('success', 'Data pelanggaran berhasil diupdate!')->with('points_limit_reached', 'Siswa mencapai batas poin 100! Segera temui Guru BK.');
         }
 
         return redirect()->route('monitoring.index')->with('success', 'Data pelanggaran berhasil diupdate!');
@@ -191,5 +185,26 @@ class PelanggaranController extends Controller
         $this->sanctionService->updateSiswaSanction($namaSiswa);
 
         return redirect()->back()->with('success', 'Data pelanggaran berhasil dihapus!');
+    }
+
+    // Reset poin siswa (Hapus semua pelanggaran)
+    public function reset(Request $request)
+    {
+        $request->validate([
+            'nama_siswa' => 'required|string|max:255',
+        ]);
+
+        $user = auth()->user();
+        if ($user->role !== 'GURU_BK' && $user->role !== 'ADMIN') {
+            abort(403, 'Anda tidak memiliki akses!');
+        }
+
+        // Hapus semua data pelanggaran siswa tersebut
+        Pelanggaran::where('nama_siswa', $request->nama_siswa)->delete();
+
+        // Update (reset) data di tabel siswa via service (akan jadi 0)
+        $this->sanctionService->updateSiswaSanction($request->nama_siswa);
+
+        return redirect()->back()->with('success', 'Poin siswa ' . $request->nama_siswa . ' berhasil direset menjadi 0.');
     }
 }

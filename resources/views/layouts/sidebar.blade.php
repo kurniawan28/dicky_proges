@@ -23,6 +23,11 @@
                🎖️ Prestasi Siswa
             </a>
 
+            <a href="{{ route('absensi.index') }}"
+               class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#ff9f43]/20 hover:border-[#ff9f43] hover:shadow-[0_0_15px_rgba(255,159,67,0.5)] hover:scale-[1.03] transition-all duration-300 text-[#ff9f43] font-semibold">
+               📅 Data Absensi
+            </a>
+
             <a href="{{ route('jadwal.index') }}"
                class="block py-3 px-5 rounded-xl bg-[#1e3a45]/80 border border-[#b388eb]/20 hover:border-[#b388eb] hover:shadow-[0_0_15px_rgba(179,136,235,0.5)] hover:scale-[1.03] transition-all duration-300 text-[#b388eb] font-semibold">
                💬 Daftar Konseling

@@ -10,6 +10,8 @@
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Google ReCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <style>
         body {
@@ -80,6 +82,13 @@
                 </div>
             @endif
 
+            <!-- Success Session -->
+            @if(session('success'))
+                <div class="bg-green-100 text-green-700 p-3 rounded-lg mb-4 text-center font-medium">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <form action="{{ route('login.submit') }}" method="POST" class="space-y-5">
                 @csrf
 
@@ -103,8 +112,21 @@
                            placeholder="Password"
                            class="w-full px-4 py-3 rounded-lg bg-black/30 border border-cyan-500 placeholder-cyan-300 text-white transition"
                            autocomplete="off">
+                    <div class="flex justify-end mt-1">
+                        <a href="{{ route('password.request') }}" class="text-cyan-400 text-xs hover:underline">
+                            Lupa password?
+                        </a>
+                    </div>
                     @error('password')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <!-- ReCAPTCHA -->
+                <div class="flex justify-center my-4">
+                    <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
+                    @error('g-recaptcha-response')
+                        <span class="text-red-500 text-sm block text-center mt-1">{{ $message }}</span>
                     @enderror
                 </div>
 

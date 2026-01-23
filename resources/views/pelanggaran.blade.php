@@ -53,7 +53,7 @@ body {
 
 <nav class="fixed top-0 left-0 right-0 bg-slate-900/80 backdrop-blur-md border-b border-slate-700 p-4 flex justify-between items-center px-6 z-50">
   <a href="{{ route('dashboard') }}" class="text-xl font-semibold text-white flex items-center gap-2">
-    🏫 Sistem BK Sekolah
+    🏫 dashboard
   </a>
   <form action="{{ route('logout') }}" method="POST">
     @csrf
@@ -68,19 +68,28 @@ body {
     ⚠️ Pelanggaran Siswa
   </h1>
 
+  {{-- BANNER WARNING FOR STUDENT --}}
+  @if(isset($studentWarning) && $studentWarning)
+  <div class="bg-red-600 border-l-4 border-yellow-400 text-white p-6 mb-8 rounded-r-lg shadow-lg animate-pulse">
+      <div class="flex items-center gap-4">
+          <div class="text-4xl">⚠️</div>
+          <div>
+              <h3 class="font-bold text-2xl uppercase">Peringatan Keras!</h3>
+              <p class="text-lg mt-1 font-semibold">"Segera temui Guru BK di ruangan sekarang juga!"</p>
+              <p class="text-sm opacity-90 mt-2">{{ $studentWarning }}</p>
+          </div>
+      </div>
+  </div>
+  @endif
+
   {{-- FORM TAMBAH --}}
   @if(auth()->user()->role === 'GURU_BK' || auth()->user()->role === 'ADMIN')
   <form action="{{ route('pelanggaran.store') }}" method="POST"
         class="mb-8 grid grid-cols-1 md:grid-cols-6 gap-4">
     @csrf
 
-    <select name="nama_siswa" required
+    <input type="text" name="nama_siswa" placeholder="Nama Siswa" required
       class="p-3 rounded-lg bg-slate-800 text-gray-200 border border-slate-700">
-      <option value="">Pilih Siswa</option>
-      @foreach($siswas as $siswa)
-        <option value="{{ $siswa->name }}">{{ $siswa->name }}</option>
-      @endforeach
-    </select>
 
     <input type="text" name="kelas" placeholder="Kelas dan absen" required
       class="p-3 rounded-lg bg-slate-800 text-gray-200 border border-slate-700">
@@ -101,7 +110,6 @@ body {
 
     <!-- 🔒 TANGGAL TIDAK BISA MUNDUR -->
     <input type="date" name="tanggal" required
-      min="{{ date('Y-m-d') }}"
       class="p-3 rounded-lg bg-slate-800 text-gray-200 border border-slate-700">
 
     <button type="submit"
@@ -109,6 +117,23 @@ body {
       Tambahkan Pelanggaran
     </button>
   </form>
+
+  {{-- FORM RESET POIN (Toggleable or Side-by-side) --}}
+  <div class="mb-8 border-t border-slate-700 pt-4">
+      <h2 class="text-xl font-bold text-white mb-4">🔄 Reset Poin Siswa</h2>
+      <form action="{{ route('pelanggaran.reset') }}" method="POST" class="flex gap-4 items-center" onsubmit="return confirm('Yakin ingin mereset poin siswa ini menjadi 0? Semua histori pelanggaran akan dihapus.');">
+          @csrf
+          <select name="nama_siswa" required class="flex-1 p-3 rounded-lg bg-slate-800 text-gray-200 border border-slate-700">
+              <option value="" disabled selected>Pilih Siswa...</option>
+              @foreach($siswaMelanggar as $nama)
+                  <option value="{{ $nama }}">{{ $nama }}</option>
+              @endforeach
+          </select>
+          <button type="submit" class="bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-lg font-semibold transition">
+              Reset Poin 0
+          </button>
+      </form>
+  </div>
   @endif
 
   <!-- SEARCH -->
@@ -123,6 +148,42 @@ body {
       onkeyup="searchTable()"
     >
   </div>
+  @endif
+
+  {{-- SWEETALERT FOR SESSION FLASH --}}
+  @if(session('points_limit_reached'))
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    Swal.fire({
+      icon: 'warning',
+      title: 'PERINGATAN KERAS!',
+      text: "{{ session('points_limit_reached') }}",
+      background: '#1e293b',
+      color: '#ffffff',
+      confirmButtonColor: '#d33',
+      confirmButtonText: 'Mengerti, Segera Proses!'
+    });
+  </script>
+  @endif
+
+  {{-- SWEETALERT FOR STUDENT PERSISTENT WARNING --}}
+  @if(isset($studentWarning) && $studentWarning)
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        Swal.fire({
+        icon: 'error', 
+        title: '⛔ BATAS POIN TERCAPAI',
+        text: "{!! $studentWarning !!}",
+        background: '#1e293b',
+        color: '#ffffff',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'Saya Akan Menghadap Guru BK'
+        });
+    });
+  </script>
   @endif
 
   {{-- TABEL --}}

@@ -14,7 +14,8 @@
                 <th class="px-4 py-2">Nama Siswa</th>
                 <th class="px-4 py-2">Kelas</th>
                 <th class="px-4 py-2">Tanggal</th>
-                <th class="px-4 py-2">Permasalahan</th>
+                <th class="px-4 py-2">Absensi</th>
+                <th class="px-4 py-2">Permasalahan/Keterangan</th>
                 <th class="px-4 py-2">Guru BK</th>
                 <th class="px-4 py-2">Status</th>
                 <th class="px-4 py-2">Aksi</th>
@@ -26,9 +27,24 @@
                 <td class="px-4 py-2">{{ $k->nama_siswa }}</td>
                 <td class="px-4 py-2">{{ $k->kelas }}</td>
                 <td class="px-4 py-2">{{ $k->tanggal }}</td>
+                <td class="px-4 py-2">
+                    @if($k->absen)
+                        <span class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded text-xs font-bold">{{ $k->absen }}</span>
+                    @else
+                        -
+                    @endif
+                </td>
                 <td class="px-4 py-2">{{ $k->permasalahan }}</td>
                 <td class="px-4 py-2">{{ $k->guru_bk }}</td>
-                <td class="px-4 py-2">{{ ucfirst($k->status) }}</td>
+                <td class="px-4 py-2">
+                    @if($k->status == 'pending')
+                        <span class="bg-gray-200 text-gray-800 px-2 py-1 rounded text-xs">Menunggu Konfirmasi</span>
+                    @elseif($k->status == 'setuju')
+                        <span class="bg-green-200 text-green-800 px-2 py-1 rounded text-xs">Dicatat/Disetujui</span>
+                    @else
+                        <span class="bg-red-200 text-red-800 px-2 py-1 rounded text-xs">Ditolak</span>
+                    @endif
+                </td>
                 <td class="px-4 py-2">
                     @if($k->status == 'pending')
                     <form action="{{ route('konseling.updateStatus', $k->id) }}" method="POST" class="flex gap-2">

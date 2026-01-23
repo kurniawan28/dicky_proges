@@ -27,6 +27,7 @@ class KonselingController extends Controller
         ]);
 
         Konseling::create([
+            'user_id'      => auth()->id(),
             'nama_siswa'   => auth()->user()->name,
             'kelas'        => $request->kelas,
             'absen'        => $request->absen,
@@ -42,12 +43,12 @@ class KonselingController extends Controller
             ->with('success', 'Konseling berhasil diajukan!');
     }
 
-    // Daftar konseling
+    // Daftar konseling (Hanya Konseling, bukan Absensi)
     public function index()
     {
         $user = auth()->user();
 
-        $query = Konseling::orderBy('created_at', 'desc');
+        $query = Konseling::orderBy('created_at', 'desc')->whereNull('absen');
 
         if ($user->role === 'SISWA') {
             $query->where('nama_siswa', $user->name);
@@ -56,6 +57,14 @@ class KonselingController extends Controller
         $konseling = $query->get();
 
         return view('jadwal-konseling', compact('konseling'));
+    }
+
+    // Daftar Absensi (Baru)
+    public function indexAbsensi()
+    {
+        // Hanya ambil data yang field 'absen' nya TIDAK NULL
+        $dataAbsensi = Konseling::orderBy('created_at', 'desc')->whereNotNull('absen')->get();
+        return view('konseling.absensi', compact('dataAbsensi'));
     }
 
     // Edit (Guru BK)
@@ -91,18 +100,20 @@ class KonselingController extends Controller
     {
         Konseling::findOrFail($id)->delete();
 
-        return redirect()->route('konseling.index')
-            ->with('success', 'Data konseling berhasil dihapus!');
+        return redirect()->back()
+            ->with('success', 'Data berhasil dihapus!');
     }
 
     // Update status
-    public function updateStatus($id)
+    public function updateStatus(Request $request, $id)
     {
         $konseling = Konseling::findOrFail($id);
-        $konseling->status = 'setuju';
+        $status = $request->status ?? 'setuju';
+        $konseling->status = $status;
         $konseling->save();
 
+        $message = $status === 'setuju' ? 'Berhasil disetujui/dicatat!' : 'Berhasil ditolak!';
         return redirect()->back()
-            ->with('success', 'Pengajuan konseling telah disetujui!');
+            ->with('success', $message);
     }
 }

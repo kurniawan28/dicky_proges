@@ -84,7 +84,8 @@
         <!-- Tanggal Lahir -->
         <div>
             <label class="block text-gray-300 font-semibold">Tanggal Lahir</label>
-            <input type="date" name="tanggal_lahir"
+            <input type="text" name="tanggal_lahir"
+                placeholder="YYYY-MM-DD (Contoh: 2006-05-20)"
                 value="{{ old('tanggal_lahir', $siswa->tanggal_lahir ?? '') }}"
                 class="w-full rounded-lg px-3 py-2 bg-gray-800 text-gray-200 
                        border border-gray-600 focus:border-cyan-500 

@@ -10,6 +10,7 @@ use App\Http\Controllers\StatistikController;
 use App\Http\Controllers\ChatBKController;
 use App\Http\Controllers\VisiMisiController;
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\WaliKelasController;
 
 // ===== Halaman awal =====
 Route::get('/', function () {
@@ -26,6 +27,12 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// ===== FORGOT PASSWORD =====
+Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/verify-otp', [AuthController::class, 'showVerifyOtpForm'])->name('password.otp.form');
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->name('password.otp.verify');
+
 // ===== DASHBOARD TERPROTEKSI =====
 Route::middleware('auth')->group(function () {
 
@@ -35,6 +42,7 @@ Route::middleware('auth')->group(function () {
         if ($role === 'GURU_BK') return redirect()->route('dashboard.admin');
         if ($role === 'ADMIN') return redirect()->route('dashboard.kepsek');
         if ($role === 'SISWA') return redirect()->route('dashboard.user');
+        if ($role === 'WALI_KELAS') return redirect()->route('dashboard.wali');
         abort(403, "Role tidak dikenali!");
     })->name('dashboard');
 
@@ -57,9 +65,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/pelanggaran/{id}/edit', [PelanggaranController::class, 'edit'])->name('pelanggaran.edit');
         Route::put('/pelanggaran/{id}', [PelanggaranController::class, 'update'])->name('pelanggaran.update');
         Route::delete('/pelanggaran/{id}', [PelanggaranController::class, 'destroy'])->name('pelanggaran.destroy');
+        Route::post('/pelanggaran/reset', [PelanggaranController::class, 'reset'])->name('pelanggaran.reset');
 
         // Konseling
         Route::get('/konseling', [KonselingController::class, 'index'])->name('konseling.index');
+        Route::get('/absensi', [KonselingController::class, 'indexAbsensi'])->name('absensi.index'); // New Route
         Route::get('/konseling/{id}/edit', [KonselingController::class, 'edit'])->name('konseling.edit');
         Route::put('/konseling/{id}', [KonselingController::class, 'update'])->name('konseling.update');
         Route::delete('/konseling/{id}', [KonselingController::class, 'destroy'])->name('konseling.destroy');
@@ -80,7 +90,7 @@ Route::middleware('auth')->group(function () {
     // ================================
     //  DASHBOARD GURU BK
     // ================================
-    Route::middleware('role:GURU_BK,ADMIN')->group(function () {
+    Route::middleware('role:GURU_BK,ADMIN,WALI_KELAS')->group(function () {
 
         Route::get('/dashboard/admin', fn() => view('dashboard.admin'))->name('dashboard.admin');
 
@@ -89,6 +99,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/jadwal/{id}', [JadwalController::class, 'destroy'])->name('jadwal.destroy');
 
         // CRUD SISWA
+        Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa.index');
         Route::get('/siswa/create', [SiswaController::class, 'create'])->name('siswa.create');
         Route::post('/siswa', [SiswaController::class, 'store'])->name('siswa.store');
         Route::get('/siswa/{siswa}/edit', [SiswaController::class, 'edit'])->name('siswa.edit');
@@ -117,7 +128,24 @@ Route::middleware('auth')->group(function () {
 
         // Siswa buat pengajuan konseling
         Route::get('/konseling/create', [KonselingController::class, 'create'])->name('konseling.create');
-        Route::post('/konseling', [KonselingController::class, 'store'])->name('konseling.store');
+    });
+
+    // ================================
+    //  DASHBOARD WALI KELAS
+    // ================================
+    Route::middleware('role:WALI_KELAS')->group(function () {
+        Route::get('/dashboard/wali', [WaliKelasController::class, 'index'])->name('dashboard.wali');
+        Route::get('/lapor-absensi', [WaliKelasController::class, 'createLaporan'])->name('wali.laporan.create');
+        Route::post('/lapor-absensi', [WaliKelasController::class, 'storeLaporan'])->name('wali.laporan.store');
+    });
+
+    // ================================
+    //  DASHBOARD WALI KELAS
+    // ================================
+    Route::middleware('role:WALI_KELAS')->group(function () {
+        Route::get('/dashboard/wali', [WaliKelasController::class, 'index'])->name('dashboard.wali');
+        Route::get('/lapor-absensi', [WaliKelasController::class, 'createLaporan'])->name('wali.laporan.create');
+        Route::post('/lapor-absensi', [WaliKelasController::class, 'storeLaporan'])->name('wali.laporan.store');
     });
 
     // ===== Halaman Umum =====

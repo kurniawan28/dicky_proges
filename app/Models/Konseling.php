@@ -10,6 +10,7 @@ class Konseling extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'nama_siswa',
         'kelas',
         'absen',
@@ -21,4 +22,9 @@ class Konseling extends Model
         'status',
         'alasan_penolakan',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

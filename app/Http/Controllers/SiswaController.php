@@ -10,8 +10,22 @@ class SiswaController extends Controller
 {
     public function index()
     {
-        // 🔥 PENTING: TANPA PAGINATION
-        $siswas = Siswa::latest()->get();
+        $user = auth()->user();
+        
+        if ($user->isAdmin() || $user->isGuruBK()) {
+            $siswas = Siswa::latest()->get();
+        } elseif ($user->role === 'WALI_KELAS' && $user->kelas_id) {
+            $kelas = \Illuminate\Support\Facades\DB::table('kelas')->where('id', $user->kelas_id)->first();
+            if ($kelas) {
+                $siswas = Siswa::where('kelas', $kelas->nama_kelas)->latest()->get();
+            } else {
+                $siswas = collect();
+            }
+        } else {
+            // Jika bukan admin/guru_bk dan gak punya kelas, mungkin tampilkan kosong atau abort
+            $siswas = collect();
+        }
+
         return view('siswa.index', compact('siswas'));
     }
 

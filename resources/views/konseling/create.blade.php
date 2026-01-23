@@ -18,7 +18,7 @@
 
 <nav class="fixed top-0 left-0 right-0 bg-slate-900/80 backdrop-blur-md border-b border-slate-700 p-4 flex justify-between items-center px-6 z-50">
   <a href="{{ route('dashboard') }}" class="text-xl font-semibold flex items-center gap-2">
-    🏫 Sistem BK Sekolah
+    🏫 dashboard
   </a>
   <form action="{{ route('logout') }}" method="POST">
     @csrf
@@ -136,6 +136,15 @@
           <option value="Bu Eka">Bu Eka</option>
           <option value="Bu Pur">Bu Pur</option>
         </select>
+        <p class="text-sm text-cyan-300 mt-2 flex items-center gap-2">
+          📞 Hubungi bu prapti : <span class="font-bold">+62 852-3201-6750</span>
+        </p>
+        <p class="text-sm text-cyan-300 mt-2 flex items-center gap-2">
+          📞 Hubungi bu eka : <span class="font-bold">+62 852-3201-6750</span>
+        </p>
+        <p class="text-sm text-cyan-300 mt-2 flex items-center gap-2">
+          📞 Hubungi bu pur : <span class="font-bold">+62 852-3201-6750</span>
+        </p>
       </div>
 
       <!-- Submit -->

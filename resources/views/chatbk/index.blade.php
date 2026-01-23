@@ -147,7 +147,7 @@ body {
 
 <!-- NAVBAR -->
 <nav class="navbar-fixed">
-    <a href="{{ route('dashboard') }}" class="text-xl font-semibold text-white">🏫 Sistem BK Sekolah</a>
+    <a href="{{ route('dashboard') }}" class="text-xl font-semibold text-white">🏫 dashboard</a>
     <form action="{{ route('logout') }}" method="POST">
         @csrf
         <button class="logout-btn text-white py-2 px-5 rounded-lg bg-red-600 hover:bg-red-700">Logout</button>
@@ -157,7 +157,7 @@ body {
 <div class="chat-wrapper">
 
     <div class="chat-header">
-        {{ $role == 'GURU_BK' ? '💬 BK AI Mode Guru' : '💬 Konseling AI Siswa' }}
+        {{ $role == 'GURU_BK' ? '💬 BK AI Mode Guru' : '💬 Konseling AI' }}
     </div>
 
     <div id="chat-box" class="chat-box"></div>

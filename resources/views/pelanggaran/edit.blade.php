@@ -53,7 +53,7 @@ body {
 
 <nav class="fixed top-0 left-0 right-0 bg-slate-900/80 backdrop-blur-md border-b border-slate-700 p-4 flex justify-between items-center px-6 z-50">
   <a href="{{ route('dashboard') }}" class="text-xl font-semibold text-white flex items-center gap-2">
-    🏫 Sistem BK Sekolah
+    🏫 dashboard
   </a>
 </nav>
 
@@ -68,15 +68,8 @@ body {
 
     <div>
         <label class="block mb-1 text-sm font-semibold">Nama Siswa</label>
-        <select name="nama_siswa" required
+        <input type="text" name="nama_siswa" value="{{ old('nama_siswa', $pelanggaran->nama_siswa) }}" required
           class="w-full p-3 rounded-lg bg-slate-800 text-gray-200 border border-slate-700 focus:outline-none focus:border-yellow-500">
-          <option value="">-- Pilih Siswa --</option>
-          @foreach($siswas as $siswa)
-            <option value="{{ $siswa->name }}" {{ old('nama_siswa', $pelanggaran->nama_siswa) == $siswa->name ? 'selected' : '' }}>
-                {{ $siswa->name }}
-            </option>
-          @endforeach
-        </select>
     </div>
 
     <div>

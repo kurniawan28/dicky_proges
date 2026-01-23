@@ -11,7 +11,7 @@
         
         <a href="{{ route('dashboard') }}" 
            class="text-2xl font-extrabold text-white flex items-center gap-2 hover:text-red-400 transition-all">
-            🏫 Sistem BK Sekolah
+            🏫 dashboard   
         </a>
 
         <form action="{{ route('logout') }}" method="POST">

@@ -12,9 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('konselings', function (Blueprint $table) {
-            if (!Schema::hasColumn('konselings', 'absen')) {
-                $table->string('absen')->nullable()->after('kelas'); 
-            }
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
         });
     }
 
@@ -24,7 +22,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('konselings', function (Blueprint $table) {
-            $table->dropColumn('absen');
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
         });
     }
 };

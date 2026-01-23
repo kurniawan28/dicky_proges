@@ -154,10 +154,12 @@ function previewImage(input, previewId) {
 </script>
 
 <!-- Image Modal -->
-<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
-  <div class="relative max-w-3xl w-full p-4">
-    <button onclick="closeImageModal()" class="absolute top-2 right-2 text-white bg-red-500 hover:bg-red-600 rounded-full px-3 py-1">Tutup</button>
-    <img id="imageModalImg" src="" class="w-full h-auto rounded-lg shadow-lg object-contain">
+<div id="imageModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4" onclick="if(event.target === this) closeImageModal()">
+  <div class="relative max-w-5xl w-full max-h-full flex justify-center items-center">
+    <img id="imageModalImg" src="" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl object-contain">
+    <button onclick="closeImageModal()" class="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white rounded-full p-2 px-4 shadow-lg z-50 transition-all hover:scale-105 font-bold border border-white/20">
+      Tutup ✕
+    </button>
   </div>
 </div>
 
