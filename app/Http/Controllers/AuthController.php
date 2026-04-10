@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Models\User;
+use App\Models\Siswa;
 
 class AuthController extends Controller
 {
@@ -94,6 +95,7 @@ public function register(Request $request)
     $request->validate([
         'name' => 'required|string|max:255',
         'email'=> 'required|email|unique:users,email',
+        'jurusan' => 'required|in:RPL,TITL,TKR,TPM',
         'password'=> 'required|string|min:6|confirmed'
     ]);
 
@@ -101,7 +103,8 @@ public function register(Request $request)
     $user = User::create([
         'name'=> $request->name,
         'email'=> $request->email,
-        'role'=> 'SISWA',  // jangan beri pilihan admin di register publik
+        'role'=> 'SISWA',
+        'jurusan' => $request->jurusan,
         'password'=> Hash::make($request->password)
     ]);
 

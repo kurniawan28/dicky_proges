@@ -11,7 +11,7 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0f172a, #1e293b);
+            background: linear-gradient(135deg, #0f172a, #1e293b, #0f172a);
             color: #e2e8f0;
             min-height: 100vh;
             display: flex;
@@ -21,42 +21,103 @@
             padding-top: 80px;
         }
 
-        .card {
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 1rem;
-            box-shadow: 0 0 25px rgba(59, 130, 246, 0.3);
-            padding: 2rem;
-            width: 90%;
-            max-width: 1200px;
-            animation: fadeIn 0.4s ease;
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            backdrop-filter: blur(16px);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(6, 182, 212, 0.1);
+            padding: 2.5rem;
+            width: 95%;
+            max-width: 1280px;
+            animation: slideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        .glow-btn {
-            background: linear-gradient(90deg, #0ea5e9, #0284c7);
+        .custom-table {
+            width: 100%;
+            border-spacing: 0 10px;
+            border-collapse: separate;
+        }
+
+        .custom-table thead tr {
+            background: linear-gradient(90deg, #0891b2, #0e7490);
+            box-shadow: 0 4px 15px rgba(8, 145, 178, 0.3);
+        }
+
+        .custom-table th {
+            padding: 1.25rem 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.8rem;
+        }
+
+        .custom-table th:first-child { border-top-left-radius: 1rem; border-bottom-left-radius: 1rem; }
+        .custom-table th:last-child { border-top-right-radius: 1rem; border-bottom-right-radius: 1rem; }
+
+        .custom-table tbody tr {
+            background: rgba(30, 41, 59, 0.5);
             transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .glow-btn:hover {
-            box-shadow: 0 0 15px #0ea5e9;
+        .custom-table tbody tr:hover {
+            background: rgba(30, 41, 59, 0.8);
+            transform: scale(1.005);
+            box-shadow: 0 5px 20px rgba(6, 182, 211, 0.15);
+        }
+
+        .custom-table td {
+            padding: 1.25rem 1rem;
+            vertical-align: middle;
+        }
+
+        .custom-table td:first-child { border-top-left-radius: 1rem; border-bottom-left-radius: 1rem; }
+        .custom-table td:last-child { border-top-right-radius: 1rem; border-bottom-right-radius: 1rem; }
+
+        .status-pill {
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 0.75rem;
+            display: inline-block;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .action-btn {
+            @apply flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all duration-300;
+        }
+
+        .btn-glow {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-glow:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
             transform: translateY(-2px);
         }
 
-        .logout-btn {
-            background: linear-gradient(90deg, #ef4444, #dc2626);
-            transition: all 0.3s ease;
+        .result-box {
+            background: rgba(15, 23, 42, 0.6);
+            border-left: 4px solid #0891b2;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.85rem;
+            line-height: 1.5;
         }
 
-        .logout-btn:hover {
-            box-shadow: 0 0 15px #ef4444;
-            transform: translateY(-2px);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
             to   { opacity: 1; transform: translateY(0); }
         }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
 <body>
@@ -73,133 +134,144 @@
         </form>
     </nav>
 
-    <div class="card mt-10">
+    <div class="glass-card mt-10">
 
         {{-- JUDUL --}}
-        <h1 class="text-3xl font-bold text-center mb-8 text-white flex justify-center items-center gap-2">
-            📋 Data Konseling Siswa
-        </h1>
-
-        {{-- TOMBOL AJUKAN KONSELING --}}
-        @if(auth()->user()->role === 'SISWA')
-            <div class="mb-8">
-                <a href="{{ route('konseling.create') }}" class="glow-btn text-white py-3 px-6 rounded-lg font-semibold inline-block">
-                    + Ajukan Konseling
+        <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
+            <h1 class="text-3xl font-extrabold text-white flex items-center gap-3">
+                <span class="p-3 bg-cyan-500/20 rounded-2xl shadow-inner">📋</span>
+                Data Konseling Siswa
+            </h1>
+            
+            @if(auth()->user()->role === 'SISWA')
+                <a href="{{ route('konseling.create') }}" class="btn-glow flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-cyan-600 text-white py-3 px-8 rounded-xl font-bold transition shadow-lg shadow-cyan-500/20">
+                    <span class="text-xl">+</span> Ajukan Konseling
                 </a>
-            </div>
-        @endif
+            @endif
+        </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full border-collapse">
-
-                {{-- HEADER TABEL --}}
-                <thead class="bg-cyan-600 text-white">
+        <div class="overflow-x-auto pb-4">
+            <table class="custom-table">
+                <thead>
                     <tr>
-                        <th class="py-3 px-4 text-left">Nama Siswa</th>
-                        <th class="py-3 px-4 text-left">Kelas</th>
-                        <th class="py-3 px-4 text-left">Absen</th>
-                        <th class="py-3 px-4 text-left">Tanggal Konseling</th>
-                        <th class="py-3 px-4 text-left">Jam</th>
+                        <th>Identitas Siswa</th>
+                        <th>Jadwal</th>
                         @if(auth()->user()->role !== 'SISWA')
-                            <th class="py-3 px-4 text-left">Permasalahan</th>
+                            <th>Permasalahan</th>
                         @endif
-                        <th class="py-3 px-4 text-left">Guru BK</th>
-                        <th class="py-3 px-4 text-center">Status</th>
+                        <th>Guru BK</th>
+                        <th class="text-center">Status</th>
+                        <th>Hasil Akhir</th>
                         @if(auth()->user()->role !== 'SISWA')
-                            <th class="py-3 px-4 text-center">Aksi</th>
+                            <th class="text-center">Tindakan</th>
                         @endif
                     </tr>
                 </thead>
 
-                {{-- BODY TABEL --}}
-                <tbody class="divide-y divide-slate-700 bg-slate-800 text-gray-300">
+                <tbody class="text-gray-300">
                     @php $hasData = false; @endphp
                     @foreach($konseling as $item)
                         @php $hasData = true; @endphp
-                        <tr class="hover:bg-slate-700 transition">
-                            <td class="py-3 px-4">{{ $item->nama_siswa }}</td>
-                            <td class="py-3 px-4">{{ $item->kelas }}</td>
-                            <td class="py-3 px-4">{{ $item->absen ?? '-' }}</td>
-                            <td class="py-3 px-4">{{ $item->tanggal }}</td>
-                            <td class="py-3 px-4">{{ $item->jam_mulai ? \Carbon\Carbon::parse($item->jam_mulai)->format('H:i') : '-' }} - {{ $item->jam_selesai ? \Carbon\Carbon::parse($item->jam_selesai)->format('H:i') : '-' }}</td>
+                        <tr>
+                            <td>
+                                <div class="font-bold text-white text-lg">{{ $item->nama_siswa }}</div>
+                                <div class="text-xs text-cyan-400 font-semibold uppercase tracking-wider mt-1">
+                                    {{ $item->kelas }} • Absen: {{ $item->absen ?? '-' }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-2 text-sm text-gray-200">
+                                    <span>📅</span> {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}
+                                </div>
+                                <div class="flex items-center gap-2 text-xs text-cyan-300 mt-1">
+                                    <span>⏰</span> {{ $item->jam_mulai ? \Carbon\Carbon::parse($item->jam_mulai)->format('H:i') : '-' }} - {{ $item->jam_selesai ? \Carbon\Carbon::parse($item->jam_selesai)->format('H:i') : '-' }}
+                                </div>
+                            </td>
                             @if(auth()->user()->role !== 'SISWA')
-                                <td class="py-3 px-4">{{ $item->permasalahan }}</td>
+                                <td class="max-w-xs text-sm italic text-gray-400">{{ $item->permasalahan }}</td>
                             @endif
-                            <td class="py-3 px-4">{{ $item->guru_bk }}</td>
+                            <td>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-cyan-500/10 flex items-center justify-center border border-cyan-500/30 text-cyan-400 text-xs font-bold">BK</div>
+                                    <span class="text-sm font-medium">{{ $item->guru_bk }}</span>
+                                </div>
+                            </td>
 
-                            {{-- STATUS + ALASAN PENOLAKAN --}}
-                            <td class="py-3 px-4 text-center">
-                                <span class="px-3 py-1 text-sm font-semibold rounded-full
-                                    @if($item->status == 'pending') bg-yellow-600 text-yellow-100
-                                    @elseif($item->status == 'setuju') bg-green-600 text-white
-                                    @elseif($item->status == 'selesai') bg-green-600 text-white
-                                    @elseif($item->status == 'tolak') bg-red-600 text-red-100
-                                    @else bg-gray-600 text-gray-100
+                            <td class="text-center">
+                                <span class="status-pill
+                                    @if($item->status == 'pending') bg-yellow-500/20 text-yellow-400 border border-yellow-500/30
+                                    @elseif($item->status == 'setuju' || $item->status == 'selesai') bg-green-500/20 text-green-400 border border-green-500/30
+                                    @elseif($item->status == 'tolak') bg-red-500/20 text-red-400 border border-red-500/30
+                                    @else bg-gray-500/20 text-gray-400 border border-gray-500/30
                                     @endif">
-                                    {{ ucfirst($item->status) }}
+                                    {{ $item->status == 'pending' ? '⏳ Menunggu' : ($item->status == 'setuju' ? '✅ Disetujui' : ucfirst($item->status)) }}
                                 </span>
 
                                 @if($item->alasan_penolakan)
-                                    <div class="mt-2 text-sm text-red-800 bg-red-100 rounded-lg px-3 py-2 inline-block max-w-xs break-words shadow-sm">
-                                        <strong>Alasan:</strong> {{ $item->alasan_penolakan }}
+                                    <div class="mt-2 text-[10px] text-red-300 bg-red-500/10 rounded-lg px-2 py-1 border border-red-500/20">
+                                        {{ $item->alasan_penolakan }}
                                     </div>
                                 @endif
                             </td>
 
-                            {{-- AKSI --}}
-                            @if(auth()->user()->role !== 'SISWA')
-                                <td class="py-3 px-4 text-center flex gap-2 justify-center flex-wrap">
+                            <td>
+                                @if($item->hasil_konseling)
+                                    <div class="result-box text-cyan-50">
+                                        {{ $item->hasil_konseling }}
+                                    </div>
+                                @else
+                                    <span class="text-gray-600 italic text-xs flex items-center gap-1.5">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-gray-600"></span>
+                                        Belum ada catatan
+                                    </span>
+                                @endif
+                            </td>
 
-                                    {{-- Setuju --}}
-                                    @if($item->status == 'pending')
-                                        <form action="{{ route('konseling.updateStatus', $item->id) }}"
-                                              method="POST"
-                                              onsubmit="return confirm('Setuju ajuan konseling ini?');">
+                            @if(auth()->user()->role !== 'SISWA')
+                                <td>
+                                    <div class="flex gap-2 justify-center">
+                                        @if($item->status == 'pending')
+                                            <form action="{{ route('konseling.updateStatus', $item->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="action-btn bg-green-600 hover:bg-green-500 text-white btn-glow" title="Setujui">
+                                                    ACC
+                                                </button>
+                                            </form>
+                                            <button onclick="openTolakModal({{ $item->id }})" class="action-btn bg-red-600 hover:bg-red-500 text-white btn-glow" title="Tolak">
+                                                TOLAK
+                                            </button>
+                                        @endif
+
+                                        @if($item->status == 'setuju')
+                                            <button onclick="openHasilModal({{ $item->id }}, '{{ addslashes($item->hasil_konseling) }}')" class="action-btn bg-cyan-600 hover:bg-cyan-500 text-white btn-glow">
+                                                HASIL
+                                            </button>
+                                        @endif
+
+                                        <form action="{{ route('konseling.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Hapus data ini?');">
                                             @csrf
-                                            <button type="submit"
-                                                    class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg">
-                                                ✅ Setuju
+                                            @method('DELETE')
+                                            <button type="submit" class="action-btn bg-slate-700 hover:bg-red-600 text-gray-300 hover:text-white transition-colors" title="Hapus">
+                                                🗑️
                                             </button>
                                         </form>
-
-                                        {{-- TOLAK --}}
-                                        <button onclick="openTolakModal({{ $item->id }})"
-                                                class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg">
-                                            ❌ Tolak
-                                        </button>
-                                    @endif
-
-                                    {{-- HAPUS --}}
-                                    <form action="{{ route('konseling.destroy', $item->id) }}"
-                                          method="POST"
-                                          onsubmit="return confirm('Hapus data ini?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                                class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg">
-                                            🗑️ Hapus
-                                        </button>
-                                    </form>
-
+                                    </div>
                                 </td>
                             @endif
-
                         </tr>
                     @endforeach
 
-                    {{-- EMPTY STATE --}}
                     @if(!$hasData)
                         <tr>
-                            <td colspan="{{ auth()->user()->role === 'SISWA' ? 7 : 9 }}"
-                                class="py-8 text-center text-lg text-gray-400">
-                                {{ auth()->user()->role === 'SISWA'
-                                    ? 'Anda belum mengajukan data konseling.'
-                                    : 'Tidak ada data konseling yang tersedia.' }}
+                            <td colspan="{{ auth()->user()->role === 'SISWA' ? 5 : 7 }}" class="py-16 text-center">
+                                <div class="text-5xl mb-4 opacity-20">📂</div>
+                                <div class="text-gray-500 text-lg italic">
+                                    {{ auth()->user()->role === 'SISWA' ? 'Anda belum memiliki riwayat konseling.' : 'Database konseling masih kosong.' }}
+                                </div>
                             </td>
                         </tr>
                     @endif
                 </tbody>
-
             </table>
         </div>
     </div>
@@ -238,6 +310,45 @@ function openTolakModal(id) {
 
             form.appendChild(csrf);
             form.appendChild(alasan);
+            document.body.appendChild(form);
+
+            form.submit();
+        }
+    });
+}
+
+function openHasilModal(id, currentResult) {
+    Swal.fire({
+        title: 'Catatan Hasil Konseling',
+        input: 'textarea',
+        inputValue: currentResult,
+        inputPlaceholder: 'Tuliskan hasil akhir/penyelesaian di sini...',
+        showCancelButton: true,
+        confirmButtonText: 'Simpan Catatan',
+        cancelButtonText: 'Batal',
+        inputValidator: (value) => {
+            if (!value) {
+                return 'Catatan tidak boleh kosong!'
+            }
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/konseling/${id}/hasil`;
+
+            let csrf = document.createElement('input');
+            csrf.type = 'hidden';
+            csrf.name = '_token';
+            csrf.value = '{{ csrf_token() }}';
+
+            let hasil = document.createElement('input');
+            hasil.type = 'hidden';
+            hasil.name = 'hasil_konseling';
+            hasil.value = result.value;
+
+            form.appendChild(csrf);
+            form.appendChild(hasil);
             document.body.appendChild(form);
 
             form.submit();

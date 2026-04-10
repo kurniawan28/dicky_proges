@@ -55,27 +55,62 @@
             @error('jenis_kelamin')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
         </div>
 
-        <!-- Kelas -->
-        <div>
-            <label class="block text-gray-300 font-semibold">Kelas</label>
-            <input type="text" name="kelas"
-                value="{{ old('kelas', $siswa->kelas ?? '') }}"
-                class="w-full rounded-lg px-3 py-2 bg-gray-800 text-gray-200 
-                       border border-gray-600 focus:border-cyan-500 
-                       focus:ring-1 focus:ring-cyan-500 outline-none transition">
-            @error('kelas')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
-        </div>
+        <!-- Kelas & Jurusan -->
+        @if(auth()->user()->role === 'WALI_KELAS')
+            <div>
+                <label class="block text-gray-300 font-semibold">Kelas</label>
+                <input type="text" name="kelas" value="{{ old('kelas', $siswa->kelas ?? (auth()->user()->kelas_id ? \Illuminate\Support\Facades\DB::table('kelas')->where('id', auth()->user()->kelas_id)->value('nama_kelas') : '')) }}" 
+                       class="w-full rounded-lg px-3 py-2 bg-gray-800 text-gray-200 
+                              border border-gray-600 focus:border-cyan-500 
+                              focus:ring-1 focus:ring-cyan-500 outline-none transition">
+                <p class="text-[10px] text-gray-400 mt-1">* Isi manual (Contoh: XII RPL 1)</p>
+                @error('kelas')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+            </div>
+            <div>
+                <label class="block text-gray-300 font-semibold">Jurusan</label>
+                <input type="text" name="jurusan" value="{{ old('jurusan', $siswa->jurusan ?? auth()->user()->jurusan) }}" 
+                       class="w-full rounded-lg px-3 py-2 bg-gray-800 text-gray-200 
+                              border border-gray-600 focus:border-cyan-500 
+                              focus:ring-1 focus:ring-cyan-500 outline-none transition">
+                @error('jurusan')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+            </div>
+        @else
+            <div>
+                <label class="block text-gray-300 font-semibold">Kelas</label>
+                <select name="kelas" id="kelasSelect"
+                    class="w-full rounded-lg px-3 py-2 bg-gray-800 text-gray-200 
+                           border border-gray-600 focus:border-cyan-500 
+                           focus:ring-1 focus:ring-cyan-500 outline-none transition">
+                    <option value="">-- Pilih Kelas --</option>
+                    @foreach($kelasList as $k)
+                        <option value="{{ $k->nama_kelas }}" data-jurusan="{{ $k->jurusan }}"
+                            {{ old('kelas', $siswa->kelas ?? '') == $k->nama_kelas ? 'selected' : '' }}>
+                            {{ $k->nama_kelas }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('kelas')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+            </div>
 
-        <!-- Jurusan -->
-        <div>
-            <label class="block text-gray-300 font-semibold">Jurusan</label>
-            <input type="text" name="jurusan"
-                value="{{ old('jurusan', $siswa->jurusan ?? '') }}"
-                class="w-full rounded-lg px-3 py-2 bg-gray-800 text-gray-200 
-                       border border-gray-600 focus:border-cyan-500 
-                       focus:ring-1 focus:ring-cyan-500 outline-none transition">
-            @error('jurusan')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
-        </div>
+            <div>
+                <label class="block text-gray-300 font-semibold">Jurusan</label>
+                <input type="text" name="jurusan" id="jurusanInput"
+                    value="{{ old('jurusan', $siswa->jurusan ?? '') }}"
+                    class="w-full rounded-lg px-3 py-2 bg-gray-800 text-gray-200 
+                           border border-gray-600 focus:border-cyan-500 
+                           focus:ring-1 focus:ring-cyan-500 outline-none transition" readonly>
+                <p class="text-[10px] text-gray-500 mt-1">* Otomatis mengikuti pilihan kelas</p>
+                @error('jurusan')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+            </div>
+
+            <script>
+                document.getElementById('kelasSelect').addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const jurusan = selectedOption.getAttribute('data-jurusan');
+                    document.getElementById('jurusanInput').value = jurusan || '';
+                });
+            </script>
+        @endif
     </div>
 
     <!-- Kanan -->

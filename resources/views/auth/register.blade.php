@@ -100,6 +100,16 @@
                        class="w-full px-4 py-3 rounded-lg bg-black/30 border border-cyan-500 placeholder-cyan-300 text-white transition"
                        required autocomplete="off">
 
+                <select name="jurusan" 
+                        class="w-full px-4 py-3 rounded-lg bg-black/30 border border-cyan-500 text-cyan-300 transition focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"
+                        required>
+                    <option value="" disabled selected>Pilih Jurusan</option>
+                    <option value="RPL">Rekayasa Perangkat Lunak (RPL)</option>
+                    <option value="TITL">Teknik Instalasi Tenaga Listrik (TITL)</option>
+                    <option value="TKR">Teknik Kendaraan Ringan (TKR)</option>
+                    <option value="TPM">Teknik Pemesinan (TPM)</option>
+                </select>
+
                 <button type="submit"
                         class="w-full py-3 rounded-xl font-semibold bg-gradient-to-r from-cyan-400 to-blue-500">
                     Register

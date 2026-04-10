@@ -110,7 +110,7 @@
         DATA SISWA
     </h2>
     <p class="text-gray-200 text-sm">
-        Daftar lengkap siswa SMK Antartika 1 Sidoarjo
+        Daftar siswa 
     </p>
 </a>
 

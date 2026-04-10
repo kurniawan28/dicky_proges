@@ -26,8 +26,21 @@ class PelanggaranController extends Controller
         // Jika SISWA, hanya tampilkan pelanggaran miliknya
         if ($user->role === 'SISWA') {
             $pelanggaran = Pelanggaran::where('nama_siswa', $user->name)->with('siswa')->get();
+        } elseif ($user->role === 'WALI_KELAS') {
+            // Ambil nama kelas yang menjadi tanggung jawab wali ini
+            $namaKelas = \Illuminate\Support\Facades\DB::table('kelas')
+                ->where('id', $user->kelas_id)
+                ->value('nama_kelas');
+
+            // Filter pelanggaran berdasarkan kelas atau jurusan binaan
+            $pelanggaran = Pelanggaran::where(function($query) use ($namaKelas, $user) {
+                if ($namaKelas) {
+                    $query->where('kelas', $namaKelas);
+                }
+                $query->orWhere('jurusan', $user->jurusan);
+            })->with('siswa')->get();
         } else {
-            // Jika GURU_BK atau KEPALA_SEKOLAH, tampilkan semua
+            // Jika GURU_BK atau ADMIN, tampilkan semua
             $pelanggaran = Pelanggaran::with('siswa')->get();
         }
 

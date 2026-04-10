@@ -21,6 +21,51 @@
     .transition-smooth {
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      padding-top: 50px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.9);
+      backdrop-filter: blur(8px);
+    }
+    .modal-content {
+      margin: auto;
+      display: block;
+      width: 80%;
+      max-width: 700px;
+      border: 4px solid #22d3ee;
+      border-radius: 1rem;
+      box-shadow: 0 0 50px rgba(34, 211, 238, 0.5);
+    }
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 35px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .close-modal:hover {
+      color: #22d3ee;
+    }
+    .img-preview {
+      cursor: pointer;
+      transition: 0.3s;
+      border: 2px solid #22d3ee33;
+    }
+    .img-preview:hover {
+      transform: scale(1.1);
+      border-color: #22d3ee;
+    }
   </style>
 </head>
 <body class="bg-gradient-to-tr from-[#0f2027] via-[#203a43] to-[#2c5364] font-[Poppins] text-gray-200">
@@ -54,9 +99,15 @@
       <!-- Grid Menu (Cards) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
   <a href="{{ route('monitoring.index') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
-    <div class="text-5xl mb-4"></div>
+    <div class="text-5xl mb-4">📢</div>
     <h2 class="text-xl font-semibold mb-2 text-cyan-200">PELANGGARAN SISWA</h2>
     <p class="text-gray-200 text-sm">data pelanggaran siswa secara keseluruhan</p>
+  </a>
+
+  <a href="{{ route('absensi.create') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
+    <div class="text-5xl mb-4">📅</div>
+    <h2 class="text-xl font-semibold mb-2 text-green-400">LAPOR ABSENSI</h2>
+    <p class="text-gray-200 text-sm">Laporkan jika kamu sakit atau izin hari ini</p>
   </a>
 
   <a href="{{ route('prestasi.index') }}" class="p-6 glow-card text-white text-center shadow-xl transition-smooth" style="background-color:#0B1828;">
@@ -93,6 +144,75 @@
 
 </div>
 
+      <!-- Riwayat Absensi Siswa -->
+      <div class="mt-12">
+        <h3 class="text-2xl font-bold text-cyan-400 mb-6 flex items-center gap-2">
+            📊 Riwayat Status Absensi Saya
+        </h3>
+        
+        <div class="overflow-x-auto bg-[#0b1a2b]/80 backdrop-blur-lg rounded-2xl shadow-2xl border border-cyan-500/20 p-6">
+            <table class="w-full text-left text-gray-300">
+                <thead class="bg-[#1e3a45] text-cyan-300 uppercase font-semibold text-sm">
+                    <tr>
+                        <th class="px-6 py-4 rounded-tl-lg">Tanggal</th>
+                        <th class="px-6 py-4">Alasan</th>
+                        <th class="px-6 py-4">Status</th>
+                        <th class="px-6 py-4">Keterangan</th>
+                        <th class="px-6 py-4 rounded-tr-lg">Bukti</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-700/50">
+                    @forelse($absensi as $item)
+                    <tr class="hover:bg-[#152e3b] transition duration-200">
+                        <td class="px-6 py-4 text-sm">{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</td>
+                        <td class="px-6 py-4">
+                            @if($item->absen == 'Sakit')
+                                <span class="px-2 py-1 rounded-md text-xs font-bold bg-yellow-500/20 text-yellow-500 border border-yellow-500/30">Sakit</span>
+                            @elseif($item->absen == 'Izin')
+                                <span class="px-2 py-1 rounded-md text-xs font-bold bg-blue-500/20 text-blue-500 border border-blue-500/30">Izin</span>
+                            @else
+                                <span class="px-2 py-1 rounded-md text-xs font-bold bg-red-500/20 text-red-500 border border-red-500/30">Alpha</span>
+                            @endif
+                        </td>
+                        <td class="px-6 py-4">
+                            @if($item->status == 'pending_wali')
+                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">Menunggu Wali Kelas</span>
+                            @elseif($item->status == 'pending_admin')
+                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">Diteruskan ke BK</span>
+                            @elseif($item->status == 'setuju')
+                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-green-500/20 text-green-500 border border-green-500/30">Disetujui</span>
+                            @elseif($item->status == 'ditolak' || $item->status == 'tolak')
+                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-red-500/20 text-red-500 border border-red-500/30">Ditolak</span>
+                            @else
+                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-500/20 text-gray-400">{{ $item->status }}</span>
+                            @endif
+                        </td>
+                        <td class="px-6 py-4 text-xs text-gray-400 italic">
+                            {{ $item->permasalahan ?? '-' }}
+                        </td>
+                        <td class="px-6 py-4">
+                            @if($item->bukti)
+                                <img src="{{ asset('storage/' . $item->bukti) }}" 
+                                     alt="Bukti" 
+                                     class="w-10 h-10 object-cover rounded shadow-lg img-preview"
+                                     onclick="openImageModal(this.src)">
+                            @else
+                                <span class="text-gray-600 text-[10px]">-</span>
+                            @endif
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="px-6 py-8 text-center text-gray-500 italic">
+                            Belum ada riwayat laporan absensi.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+      </div>
+
 <!-- Footer Sosmed -->
       <footer class="bg-[#0b1a2b]/80 backdrop-blur-lg text-gray-200 text-center py-8 mt-16 rounded-xl">
 
@@ -124,6 +244,30 @@
 
     </main>
   </div>
+
+  <!-- Modal for Image Preview -->
+  <div id="imageModal" class="modal" onclick="closeImageModal()">
+    <span class="close-modal" onclick="closeImageModal()">&times;</span>
+    <img class="modal-content" id="img01">
+  </div>
+
+  <script>
+    function openImageModal(src) {
+      document.getElementById("imageModal").style.display = "block";
+      document.getElementById("img01").src = src;
+    }
+
+    function closeImageModal() {
+      document.getElementById("imageModal").style.display = "none";
+    }
+
+    // Close on ESC key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === "Escape") {
+        closeImageModal();
+      }
+    });
+  </script>
 
   @if(session('success'))
   <script>

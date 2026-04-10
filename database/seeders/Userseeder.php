@@ -20,36 +20,40 @@ class UserSeeder extends Seeder
             ]
         );
 
-        // Create Kelas
-        $kelasId = \Illuminate\Support\Facades\DB::table('kelas')->insertGetId([
-            'nama_kelas' => 'XII RPL 1',
-            'jurusan' => 'RPL',
-            'tingkat' => 12,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        // Create Kelas & Wali Kelas for each Department
+        $jurusans = ['RPL', 'TITL', 'TKR', 'TPM'];
+        foreach ($jurusans as $j) {
+            $kelasId = \Illuminate\Support\Facades\DB::table('kelas')->insertGetId([
+                'nama_kelas' => "XII $j",
+                'jurusan' => $j,
+                'tingkat' => 12,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
 
-        // Wali Kelas
-        User::updateOrCreate(
-            ['email' => 'wali_kelas@gmail.com'],
-            [
-                'name' => 'Wali Kelas',
-                'password' => Hash::make('password123'),
-                'role' => 'WALI_KELAS',
-                'kelas_id' => $kelasId,
-            ]
-        );
+            // Wali Kelas per Jurusan
+            User::updateOrCreate(
+                ['email' => 'wali_' . strtolower($j) . '@gmail.com'],
+                [
+                    'name' => "Wali Kelas $j",
+                    'password' => Hash::make('password123'),
+                    'role' => 'WALI_KELAS',
+                    'kelas_id' => $kelasId,
+                    'jurusan' => $j,
+                ]
+            );
 
-        // Siswa (Linked to Class)
-        User::updateOrCreate(
-            ['email' => 'siswa_rpl@gmail.com'],
-            [
-                'name' => 'Siswa RPL',
-                'password' => Hash::make('password123'),
-                'role' => 'SISWA',
-                'kelas_id' => $kelasId,
-            ]
-        );
-
+            // Dummy Siswa for each Jurusan
+            User::updateOrCreate(
+                ['email' => 'siswa_' . strtolower($j) . '@gmail.com'],
+                [
+                    'name' => "Siswa $j",
+                    'password' => Hash::make('password123'),
+                    'role' => 'SISWA',
+                    'kelas_id' => $kelasId,
+                    'jurusan' => $j,
+                ]
+            );
+        }
     }
 }

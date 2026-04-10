@@ -12,56 +12,58 @@ class WaliKelasController extends Controller
 {
     public function index()
     {
-        $reports = Konseling::where('user_id', Auth::id())
+        $user = Auth::user();
+        
+        // Ambil laporan absensi (absen tidak null) 
+        // yang Jurusan siswanya sama dengan Jurusan Wali Kelas
+        $reports = Konseling::whereNotNull('absen')
+                    ->whereHas('user', function($query) use ($user) {
+                        $query->where('jurusan', $user->jurusan);
+                    })
                     ->orderBy('created_at', 'desc')
                     ->get();
                     
         return view('dashboard.wali', compact('reports'));
     }
 
-    public function createLaporan()
+    public function setujuiWali($id)
     {
-        // Ambil data siswa yg ada di kelas si wali kelas (Opsional: filter by class if relation exists)
-        // Untuk sekarang ambil semua siswa dulu atau filter nanti
-        // Asumsi: Kita bisa ambil list siswa. Kalau di User model ada 'kelas_id', kita filter based on that.
-        // Tapi User model Wali Kelas mungkin punya 'kelas_id' juga?
+        $report = Konseling::findOrFail($id);
         
-        $user = Auth::user();
-        $kelasId = $user->kelas_id;
-        
-        // Cek apakah Wali Kelas punya kelas
-        if($kelasId) {
-            $siswa = User::where('role', 'SISWA')->where('kelas_id', $kelasId)->get();
-        } else {
-             // Fallback kalo belum set kelas, tampilkan semua siswa (atau kosong)
-            $siswa = User::where('role', 'SISWA')->get();
+        // Cek apakah wali kelas berhak (jurusan sama)
+        if ($report->user->jurusan !== Auth::user()->jurusan) {
+            abort(403);
         }
 
-        return view('wali.laporan', compact('siswa'));
+        $report->update(['status' => 'pending_admin']);
+
+        return redirect()->route('dashboard.wali')->with('success', 'Laporan berhasil diteruskan ke Admin!');
     }
 
-    public function storeLaporan(Request $request)
+    public function tolakWali($id)
     {
-        $request->validate([
-            'nama_siswa' => 'required|string',
-            'tanggal' => 'required|date',
-            'absen' => 'required|in:Sakit,Izin,Alpha',
-            'keterangan' => 'nullable|string'
-        ]);
+        $report = Konseling::findOrFail($id);
+        
+        if ($report->user->jurusan !== Auth::user()->jurusan) {
+            abort(403);
+        }
 
-        // Simpan ke tabel konselings
-        Konseling::create([
-            'user_id' => Auth::id(),
-            'nama_siswa' => $request->nama_siswa,
-            'kelas' => '-', // Bisa diisi manual atau ambil dari user login jika Wali Kelas punya kelas linked
-            'tanggal' => $request->tanggal,
-            'permasalahan' => $request->keterangan ?? 'Laporan Absensi (' . $request->absen . ')',
-            'guru_bk' => '-', 
-            'status' => 'pending',
-            'absen' => $request->absen
-        ]);
+        $report->update(['status' => 'ditolak']);
 
-        return redirect()->route('dashboard.wali')->with('success', 'Laporan absensi berhasil dikirim!');
+        return redirect()->route('dashboard.wali')->with('success', 'Laporan berhasil ditolak.');
     }
 
+    public function destroy($id)
+    {
+        $report = Konseling::findOrFail($id);
+        
+        // Pastikan wali kelas hanya bisa menghapus laporan dari jurusannya sendiri
+        if ($report->user->jurusan !== Auth::user()->jurusan) {
+            abort(403);
+        }
+
+        $report->delete();
+
+        return redirect()->route('dashboard.wali')->with('success', 'Laporan berhasil dihapus.');
+    }
 }

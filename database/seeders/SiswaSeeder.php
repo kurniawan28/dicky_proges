@@ -62,9 +62,21 @@ class SiswaSeeder extends Seeder
             "SATRYA PRAMUDYA ANANDITA"
         ];
 
-        foreach ($names as $name) {
+        foreach ($names as $index => $name) {
+            $nis = "22230" . ($index + 1);
+            
+            \App\Models\Siswa::updateOrCreate(
+                ['nis' => $nis],
+                [
+                    'nama_lengkap' => $name,
+                    'kelas' => 'XII RPL 1',
+                    'jurusan' => 'RPL',
+                    'jenis_kelamin' => 'L',
+                ]
+            );
+
             // Generate email slug from name
-            $slug = Str::slug($name, '');
+            $slug = \Illuminate\Support\Str::slug($name, '');
             $email = $slug . '@siswa.com';
 
             // Check if user exists
@@ -74,6 +86,7 @@ class SiswaSeeder extends Seeder
                     'email' => $email,
                     'password' => Hash::make('12345678'),
                     'role' => 'SISWA',
+                    'jurusan' => 'RPL',
                 ]);
             }
         }

@@ -27,6 +27,15 @@ class ChatBKController extends Controller
         }
 
         try {
+            $user = auth()->user();
+            $roleLabel = 'Siswa';
+            
+            if ($user->role === 'WALI_KELAS') {
+                $roleLabel = 'Wali Kelas';
+            } elseif ($user->role === 'GURU_BK' || $user->role === 'ADMIN') {
+                $roleLabel = 'Admin';
+            }
+
             // Kirim request ke GROQ API
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $apiKey,
@@ -35,18 +44,17 @@ class ChatBKController extends Controller
                 'model' => 'llama-3.1-8b-instant',
                 'messages' => [
                     [
+                        'role' => 'system',
+                        'content' => "Kamu adalah AI Bimbingan Konseling yang ramah dan sopan. Sapa pengguna dengan sebutan 'Halo {$roleLabel}' di awal jawabanmu sebagai sapaan pembuka."
+                    ],
+                    [
                         'role' => 'user',
-                        'content' => "Kamu adalah AI Bimbingan Konseling yang ramah, sopan, dan membantu siswa.
-
-Pesan siswa:
-{$request->message}"
+                        'content' => $request->message
                     ]
                 ]
             ]);
 
             $data = $response->json();
-
-            // Ambil balasan AI
             $aiReply = $data['choices'][0]['message']['content'] ?? 'AI tidak merespon.';
 
             return response()->json([

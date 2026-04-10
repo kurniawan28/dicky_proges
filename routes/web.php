@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 
     // ===== CHAT AI =====
-    Route::middleware('role:SISWA,GURU_BK,ADMIN')->group(function () {
+    Route::middleware('role:SISWA,GURU_BK,ADMIN,WALI_KELAS')->group(function () {
         Route::get('/chat-bk', [ChatBKController::class, 'index'])->name('chat.bk');
         Route::post('/chat-bk/send', [ChatBKController::class, 'chat'])->name('chat.bk.send');
     });
@@ -80,10 +80,11 @@ Route::middleware('auth')->group(function () {
         // =====================================================
         Route::post('/konseling/{id}/acc', [JadwalController::class, 'acc'])->name('konseling.acc');
         Route::post('/konseling/{id}/tolak', [JadwalController::class, 'tolak'])->name('konseling.tolak');
+        Route::post('/konseling/{id}/hasil', [KonselingController::class, 'updateHasil'])->name('konseling.hasil');
     });
 
     // ===== VISI & MISI =====
-    Route::middleware('role:SISWA,GURU_BK,ADMIN')->group(function () {
+    Route::middleware('role:SISWA,GURU_BK,ADMIN,WALI_KELAS')->group(function () {
         Route::get('/visi-misi', [VisiMisiController::class, 'index'])->name('visi-misi');
     });
 
@@ -124,10 +125,11 @@ Route::middleware('auth')->group(function () {
     //  DASHBOARD SISWA
     // ================================
     Route::middleware('role:SISWA')->group(function () {
-        Route::get('/dashboard/user', fn() => view('dashboard.user'))->name('dashboard.user');
+        Route::get('/dashboard/user', [KonselingController::class, 'dashboardUser'])->name('dashboard.user');
 
         // Siswa buat pengajuan konseling
         Route::get('/konseling/create', [KonselingController::class, 'create'])->name('konseling.create');
+        Route::post('/konseling', [KonselingController::class, 'store'])->name('konseling.store');
     });
 
     // ================================
@@ -135,17 +137,17 @@ Route::middleware('auth')->group(function () {
     // ================================
     Route::middleware('role:WALI_KELAS')->group(function () {
         Route::get('/dashboard/wali', [WaliKelasController::class, 'index'])->name('dashboard.wali');
-        Route::get('/lapor-absensi', [WaliKelasController::class, 'createLaporan'])->name('wali.laporan.create');
-        Route::post('/lapor-absensi', [WaliKelasController::class, 'storeLaporan'])->name('wali.laporan.store');
+        Route::post('/wali/absensi/{id}/setujui', [WaliKelasController::class, 'setujuiWali'])->name('wali.absensi.setujui');
+        Route::post('/wali/absensi/{id}/tolak', [WaliKelasController::class, 'tolakWali'])->name('wali.absensi.tolak');
+        Route::delete('/wali/absensi/{id}', [WaliKelasController::class, 'destroy'])->name('wali.absensi.destroy');
     });
 
     // ================================
-    //  DASHBOARD WALI KELAS
+    //  LAPOR ABSENSI (SISWA)
     // ================================
-    Route::middleware('role:WALI_KELAS')->group(function () {
-        Route::get('/dashboard/wali', [WaliKelasController::class, 'index'])->name('dashboard.wali');
-        Route::get('/lapor-absensi', [WaliKelasController::class, 'createLaporan'])->name('wali.laporan.create');
-        Route::post('/lapor-absensi', [WaliKelasController::class, 'storeLaporan'])->name('wali.laporan.store');
+    Route::middleware('role:SISWA')->group(function () {
+        Route::get('/lapor-absensi', [KonselingController::class, 'createAbsensi'])->name('absensi.create');
+        Route::post('/lapor-absensi', [KonselingController::class, 'storeAbsensi'])->name('absensi.store');
     });
 
     // ===== Halaman Umum =====

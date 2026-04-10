@@ -20,6 +20,7 @@ class User extends Authenticatable
         'role',      // role: 'GURU_BK', 'ADMIN', atau 'SISWA'
         'password',
         'kelas_id',
+        'jurusan',
     ];
 
     /**

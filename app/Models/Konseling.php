@@ -21,6 +21,8 @@ class Konseling extends Model
         'guru_bk',
         'status',
         'alasan_penolakan',
+        'bukti',
+        'hasil_konseling',
     ];
 
     public function user()
